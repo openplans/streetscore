@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'nose',
     'bootstrapped',
     'djangorestframework',
+    'backbonejs',
 
     # Project-specific apps
     'project',
