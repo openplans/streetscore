@@ -17,14 +17,14 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^/$',
+    url(r'^$',
         views.TemplateView.as_view(template_name='bootstrap-fluid.html'),
         name='home'),
 
-    url(r'^answer/$',
-        resources.AnswerListView.as_view(),
-        name='answer_instance'),
-    url(r'^answer/(P<id>\d+)$',
-        resources.AnswerListView.as_view(),
-        name='answer_list'),
+    url(r'^ratings/$',
+        resources.RatingListView.as_view(),
+        name='rating_list'),
+    url(r'^ratings/(P<id>\d+)$',
+        resources.RatingInstanceView.as_view(),
+        name='rating_instance'),
 )
