@@ -1,6 +1,6 @@
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'spacialdb0_atogle',                      # Or path to database file if using sqlite3.
         'USER': 'atogle',                      # Not used with sqlite3.
         'PASSWORD': '9087411b5b',                  # Not used with sqlite3.

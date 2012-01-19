@@ -43,6 +43,12 @@ class Criterion (models.Model):
     """ The question prompt, i.e. 'How clean is the street?'.
         """
 
+    def __unicode__(self):
+        return self.prompt
+
+    class Meta:
+        verbose_name_plural = "criteria"
+
 
 class Segment (models.Model):
     id = models.IntegerField(db_column='osm_id', primary_key=True)
@@ -52,6 +58,9 @@ class Segment (models.Model):
 
     class Meta:
         db_table = u'philly_street_osm_line'
+
+    def __unicode__(self):
+        return 'Segement #{}'.format(self.id)
 
     @property
     def blocks(self):
