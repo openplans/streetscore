@@ -1,0 +1,22 @@
+# Django trunk
+svn+http://code.djangoproject.com/svn/django/trunk/#egg=Django
+
+# Django stable
+# django
+
+# Bootstrap theme and such
+django-bootstrapped
+
+# Backbone front-end application framework
+git+git://github.com/mjumbewu/django-backbonejs.git#egg=django-backbonejs
+
+# Mustache templates for the front-end
+django-mustachejs
+
+# Database
+psycopg2
+south
+
+# Testing
+django-nose
+django-jasmine

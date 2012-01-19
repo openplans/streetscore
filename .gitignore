@@ -1,0 +1,9 @@
+*.py[c|o]
+*~
+
+# Virtual environment
+.env/
+
+# Pip-built stuff
+src/
+build/
