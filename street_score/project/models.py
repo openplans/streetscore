@@ -78,12 +78,14 @@ class Segment (models.Model):
 
 
 class Block (object):
+    MAX_LENGTH = 0.2
+
     def __init__(self, segment, index):
         self.segment = segment
         self.index = index
 
     @property
-    def center_point(self):
+    def characteristic_point(self):
         """
         The half-way point between the beginning and end of the block.
         """
@@ -94,14 +96,35 @@ class SurveySession (object):
 
     """
 
-    @property
-    def questions(self):
-        return []
+    def __init__(self, questions=None, block=None):
+        self.__questions = questions
+        self.__block = block
 
     @property
-    def segment(self):
-        return None
+    def questions(self):
+        """
+        Get the set of questions for this survey.
+        """
+        return self.__questions or self.init_questions()
 
     @property
     def block(self):
-        return None
+        """
+        Get the block for this session.
+        """
+        return self.__block or self.init_block()
+
+    def init_block(self):
+        """
+        Load a block at random.
+        """
+        segment = random.choice(Segment.objects.all())
+        self.__block = random.choice(segment.blocks)
+        return self.__block
+
+    def init_questions(self):
+        """
+        Load a set of questions at random.
+        """
+        self.__questions = random.sample(Criterion.objects.all(), 2)
+        return self.__questions

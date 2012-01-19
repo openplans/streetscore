@@ -20,16 +20,20 @@ class SurveySessionResource (resources.Resource):
     model = models.SurveySession  # Can I get away with this?
     fields = (
         'questions',
-        'segment',
+        'segment_id',
         'block_index',
-        'center_point',
+        'point'
     )
+
+    def segment_id(self, session):
+        return session.block.segment.id
 
     def block_index(self, session):
         return session.block.index
 
-    def center_point(self, session):
-        return session.block.center_point
+    def point(self, session):
+        p = session.block.characteristic_point
+        return { 'lat': p.y, 'lon': p.x }
 
 class SurveySessionView (views.View):
     def get(self, request):
