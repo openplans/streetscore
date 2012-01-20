@@ -13,9 +13,6 @@ class RatingListView (views.ListOrCreateModelView):
 
 
 class SurveySessionResource (resources.Resource):
-#    def __init__(self, *args, **kwargs):
-#        super(SurveySessionResource, self).__init__(*args, **kwargs)
-#        self.survey_session = models.SurveySession()
 
     model = models.SurveySession  # Can I get away with this?
     fields = (
@@ -24,6 +21,9 @@ class SurveySessionResource (resources.Resource):
         'block_index',
         'point'
     )
+
+    def questions(self, session):
+        return session.questions
 
     def segment_id(self, session):
         return session.block.segment.id
