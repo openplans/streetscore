@@ -143,7 +143,13 @@ class SurveySession (object):
         TODO: Order the blocks by those that have the least questions answered
               about them first.
         """
-        segment = Segment.objects.all()[0]
+        ten_least_rated_segments = (
+            Segment.objects.all()
+                .annotate(num_ratings=models.Count('ratings'))
+                .order_by('num_ratings')[:10]
+        )
+
+        segment = random.choice(ten_least_rated_segments)
         self.__block = random.choice(segment.blocks)
         return self.__block
 
@@ -151,5 +157,10 @@ class SurveySession (object):
         """
         Load a set of questions at random.
         """
-        self.__questions = random.sample(Criterion.objects.all(), 2)
+        ten_least_answered_questions = (
+            Criterion.objects.all()
+                .annotate(num_ratings=models.Count('ratings'))
+                .order_by('num_ratings')[:10]
+        )
+        self.__questions = random.sample(ten_least_answered_questions, 2)
         return self.__questions
