@@ -37,5 +37,5 @@ class SurveySessionResource (resources.Resource):
 
 class SurveySessionView (views.View):
     def get(self, request):
-        survey_session = SurveySessionResource()
-        return survey_session.serialize()
+        survey_session = models.SurveySession()
+        return SurveySessionResource().serialize_model(survey_session)

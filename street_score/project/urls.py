@@ -27,4 +27,8 @@ urlpatterns = patterns('',
     url(r'^ratings/(P<id>\d+)$',
         resources.RatingInstanceView.as_view(),
         name='rating_instance'),
+
+    url(r'^survey_session',
+        resources.SurveySessionView.as_view(),
+        name='survey_session_instance')
 )

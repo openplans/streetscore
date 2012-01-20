@@ -1,4 +1,7 @@
+import math
+import random
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import GEOSGeometry
 
 
 class TimeStampedModel (models.Model):
@@ -68,27 +71,46 @@ class Segment (models.Model):
         The blocks that fall along the segment.  If the segment is shorter than
         the block length, it will contain only one block.
         """
-        []
+        class BlockSet (object):
+            def __init__(self, segment):
+                self.segment = segment
 
-    def block(index):
-        """
-        The index-th block along the segment. ValueError if index is too large.
-        """
-        raise ValueError()
+            def __len__(self):
+                return int(math.ceil(self.segment.way.length / Block.MAX_LENGTH))
+
+            def __getitem__(self, n):
+                return Block(self.segment, n)
+
+        return BlockSet(self)
 
 
 class Block (object):
-    MAX_LENGTH = 0.2
+    MAX_LENGTH = 200.0
 
     def __init__(self, segment, index):
         self.segment = segment
         self.index = index
 
     @property
+    def _start_interpolation(self):
+        return (self.MAX_LENGTH * self.index) / self.segment.way.length
+
+    @property
+    def length(self):
+        return min(self.segment.length - (self.index * self.MAX_LENGTH), self.MAX_LENGTH)
+
+    @property
     def characteristic_point(self):
         """
-        The half-way point between the beginning and end of the block.
+        The a point that will represent the block (not necessarily uniquely).
         """
+        point_data = Segment.objects.raw(
+            ('SELECT *, ST_transform(ST_line_interpolate_point(way, %s), 4326) '
+                 'AS q_start_point '
+             'FROM philly_street_osm_line WHERE osm_id=%s'),
+            [self._start_interpolation, self.segment.id])[0].q_start_point
+        point = GEOSGeometry(point_data)
+        return point
 
 
 class SurveySession (object):
@@ -117,8 +139,11 @@ class SurveySession (object):
     def init_block(self):
         """
         Load a block at random.
+
+        TODO: Order the blocks by those that have the least questions answered
+              about them first.
         """
-        segment = random.choice(Segment.objects.all())
+        segment = Segment.objects.all()[0]
         self.__block = random.choice(segment.blocks)
         return self.__block
 
