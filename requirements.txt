@@ -20,3 +20,4 @@ south
 # Testing
 django-nose
 django-jasmine
+django-debug-toolbar
