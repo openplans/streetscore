@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$',
-        views.TemplateView.as_view(template_name='bootstrap-fluid.html'),
+        views.TemplateView.as_view(template_name='index.html'),
         name='home'),
 
     url(r'^ratings/$',
