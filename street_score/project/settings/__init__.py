@@ -133,11 +133,13 @@ INSTALLED_APPS = (
     'djangorestframework',
     'backbonejs',
     'debug_toolbar',
+    'django_nose',
 
     # Project-specific apps
     'project',
 )
 
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 SOUTH_AUTO_FREEZE_APP = True
 
 # A sample logging configuration. The only tangible logging

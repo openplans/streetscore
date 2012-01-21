@@ -55,7 +55,7 @@ class Criterion (models.Model):
 
 class Segment (models.Model):
     id = models.IntegerField(db_column='osm_id', primary_key=True)
-    way = models.LineStringField(srid=900913)
+    way = models.LineStringField(srid=900913, null=True)
 
     objects = models.GeoManager()
 

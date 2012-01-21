@@ -5,6 +5,10 @@ from . import models
 class RatingResource (resources.ModelResource):
     model = models.Rating
 
+    @property
+    def question(self, rating):
+        return rating.criterion.prompt
+
 class RatingInstanceView (views.InstanceModelView):
     resource = RatingResource
 
