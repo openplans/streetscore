@@ -128,8 +128,8 @@ INSTALLED_APPS = (
 
     # 3rd-party reusable apps
     'south',
-    'nose',
     'bootstrapped',
+    'mustachejs',
     'djangorestframework',
     'backbonejs',
     'debug_toolbar',

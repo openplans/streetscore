@@ -27,10 +27,39 @@ var StreetScore = StreetScore || {};
     }
   });
 
+  S.RatingsView = Backbone.View.extend({
+    initialize: function() {
+      this.$container = $('.well');
+
+      // Bind model change event
+      this.model.bind('change', this.render, this);
+    },
+    render: function() {
+      var template = Mustache.template('ratings'),
+        questions = this.model.get('questions'),
+        ratings = [];
+
+      _.each(questions, function(obj, i){
+        ratings.push({
+          'criterion': obj.id,
+          'question': obj.prompt,
+          'score': 0
+        });
+      });
+
+      var html = template.render({ 'ratings': ratings });
+      console.log(this.$container);
+      console.log(html);
+
+      this.$container.html(html);
+    }
+  });
+
   S.AppView = Backbone.View.extend({
     initialize: function() {
       var model = new S.SurveySessionModel(),
-          streetView = new StreetScore.StreetView({ model: model });
+          streetView = new StreetScore.StreetView({ model: model }),
+          ratingsView = new StreetScore.RatingsView({ model: model });
 
       model.fetch();
     }
