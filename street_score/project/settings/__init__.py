@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'djangorestframework',
     'backbonejs',
     'debug_toolbar',
+    'mustachejs',
 
     # Project-specific apps
     'project',

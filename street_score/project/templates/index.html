@@ -1,4 +1,5 @@
 {% load bootstrap %}
+{% load mustachejs %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,6 +24,10 @@
       #streetview-container {
         height:450px;
       }
+
+      #rating-list li {
+        list-style:none;
+      }
     </style>
 
     <!-- Le fav and touch icons -->
@@ -45,13 +50,6 @@
     <div class="container-fluid">
       <div class="sidebar">
         <div class="well">
-          <h5>Sidebar</h5>
-          <ul>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-          </ul>
         </div>
       </div>
 
@@ -86,9 +84,13 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>
+    <script src="{{ STATIC_URL }}mustache/js/django.mustache.js"></script>
     <script src="{{ STATIC_URL }}underscore.js"></script>
     <script src="{{ STATIC_URL }}backbone.js"></script>
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
+
+    {% mustachejs "ratings" %}
   </body>
 </html>

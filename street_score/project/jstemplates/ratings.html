@@ -1,0 +1,16 @@
+<ul id="rating-list">
+  {{#ratings}}
+  <li>
+    <div class="input">
+      <select class="small" name="score" data-id="{{ id }}">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>
+    </div>
+    <label for="score">{{ question }}</label>
+  </li>
+  {{/ratings}}
+</ul>
