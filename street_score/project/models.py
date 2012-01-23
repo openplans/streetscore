@@ -61,6 +61,7 @@ class Segment (models.Model):
 
     class Meta:
         db_table = u'philly_street_osm_line'
+        managed = False
 
     def __unicode__(self):
         return 'Segement #{}'.format(self.id)
