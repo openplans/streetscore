@@ -1,5 +1,5 @@
 # Django trunk
-svn+http://code.djangoproject.com/svn/django/trunk/#egg=Django
+git+git://github.com/django/django.git#egg=Django
 
 # Django stable
 # django
