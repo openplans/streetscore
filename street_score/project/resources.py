@@ -12,7 +12,7 @@ from . import models
 class RatingResource (resources.ModelResource):
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime']
-    include = ['question', 'point']
+    include = ['question']
 
     def criterion(self, rating):
         return rating.criterion.id
@@ -20,9 +20,6 @@ class RatingResource (resources.ModelResource):
     def segment(self, rating):
         return rating.segment.id
 
-    def point(self, rating):
-        p = rating.block.characteristic_point
-        return { 'lat': p.y, 'lon': p.x }
 
 class RatingJSONParser (parsers.JSONParser):
     def parse(self, stream):
@@ -56,13 +53,25 @@ class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
 
     @property
     def queryset(self):
-        return models.Rating.objects.order_by('segment', 'block_index')
+        return models.Rating.objects.order_by('segment', 'block_index').select_related()
 
 
 class BlockRatingResource (RatingResource):
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime', 'score']
-    include = ['question', 'point', 'score__avg']
+    include = ['segment', 'question', 'point', 'score__avg']
+
+    def segment(self, rating):
+        return rating['segment__id']
+
+    def point(self, rating):
+        segment = models.Segment.objects.get(id=rating['segment__id'])
+        block = models.Block(segment, rating['block_index'])
+        p = block.characteristic_point
+        return { 'lat': p.y, 'lon': p.x }
+
+    def question(self, rating):
+        return rating['criterion__prompt']
 
 class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
     resource = BlockRatingResource
@@ -70,7 +79,7 @@ class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
     @property
     def queryset(self):
         from django.db.models import Avg
-        return models.Rating.objects.annotate(Avg('score')).order_by('segment', 'block_index').select_related()
+        return models.Rating.objects.values('segment__id', 'block_index', 'criterion__prompt').annotate(Avg('score')).select_related()
 
 
 ##
