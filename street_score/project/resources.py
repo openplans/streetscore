@@ -12,13 +12,17 @@ from . import models
 class RatingResource (resources.ModelResource):
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime']
-    include = ['question']
+    include = ['question', 'point']
 
     def criterion(self, rating):
         return rating.criterion.id
 
     def segment(self, rating):
         return rating.segment.id
+
+    def point(self, rating):
+        p = rating.block.characteristic_point
+        return { 'lat': p.y, 'lon': p.x }
 
 class RatingJSONParser (parsers.JSONParser):
     def parse(self, stream):
@@ -33,12 +37,10 @@ class RatingJSONParser (parsers.JSONParser):
         # the entire sync method).  I may have to extend the Backbone.Model
         # class to be a little smarter.
 
-        if u'id' in parsed_data:
-            del parsed_data[u'id']
-        if u'url' in parsed_data:
-            del parsed_data[u'url']
-        if u'question' in parsed_data:
-            del parsed_data[u'question']
+        ignore = [u'id', u'url', u'question', u'point']
+        for key in ignore:
+            if key in parsed_data:
+                del parsed_data[key]
 
         return parsed_data, parsed_files
 
