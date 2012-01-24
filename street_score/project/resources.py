@@ -11,7 +11,7 @@ from . import models
 class RatingResource (resources.ModelResource):
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime']
-    include = ['url']
+    include = ['question']
 
     def criterion(self, rating):
         return rating.criterion.id
