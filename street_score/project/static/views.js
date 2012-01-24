@@ -54,18 +54,22 @@ var StreetScore = StreetScore || {};
       console.log(html);
       this.$container.html(html);
 
-      // Loop through the questions, creating a corresponding RatingModel for
-      // each.
-      _.each(questions, function(obj, i){
-        var rating, itemView;
+      // As we add new ratings to the collection, we want new views to be
+      // associated with them.
+      ratings.bind('add', function(rating) {
+        var itemView = new S.RatingView({model: rating});
+        listView.$container.find('ul#rating-list').append(itemView.render().el);
+      });
 
-        rating = new S.RatingModel({
-          'criterion': obj.id,
-          'question': obj.prompt,
+      // Loop through the questions, creating a corresponding RatingModel for
+      // each.  We add them to the collection instead of just creating them
+      // directly because the collection is how they know their URL.
+      _.each(questions, function(question){
+        ratings.add({
+          'criterion': question.id,
+          'question': question.prompt,
           'score': 0
         });
-        itemView = new S.RatingView({model: rating});
-        listView.$container.find('ul#rating-list').append(itemView.render().el);
       });
 
       return this;
