@@ -80,5 +80,13 @@ class SurveySessionResource (resources.Resource):
 
 class SurveySessionView (views.View):
     def get(self, request):
-        survey_session = models.SurveySession()
+        block_index = request.GET.get('block_index')
+        segment_id = request.GET.get('segment')
+
+        block = None
+        if segment_id is not None and block_index is not None:
+            segment = models.Segment.objects.get(segment_id)
+            block = models.Block(segment, int(block_index))
+
+        survey_session = models.SurveySession(block=block)
         return SurveySessionResource().serialize_model(survey_session)
