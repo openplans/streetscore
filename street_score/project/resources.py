@@ -70,7 +70,7 @@ class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
     @property
     def queryset(self):
         from django.db.models import Avg
-        return models.Rating.objects.annotate(Avg('score')).order_by('segment', 'block_index')
+        return models.Rating.objects.annotate(Avg('score')).order_by('segment', 'block_index').select_related()
 
 
 ##
