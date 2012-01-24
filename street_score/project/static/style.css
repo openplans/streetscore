@@ -7,11 +7,11 @@ body {
 }
 
 .container-fluid .sidebar {
-  width:300px;
+  width:340px;
 }
 
 .container-fluid .content {
-  margin-left:320px;
+  margin-left:360px;
 }
 
 #rating-list {
@@ -25,4 +25,8 @@ body {
 
 #rating-list li label {
   float:none;
+}
+
+a#next-survey {
+  margin-top:15px;
 }

@@ -43,6 +43,9 @@ var StreetScore = StreetScore || {};
         , ratings = new S.RatingCollection()
         , listView = this;
 
+      // Empty the list before appending
+      listView.$container.empty();
+
       // As we add new ratings to the collection, we want new views to be
       // associated with them.
       ratings.bind('add', function(rating) {
@@ -111,6 +114,11 @@ var StreetScore = StreetScore || {};
           ratingsView = new StreetScore.RatingsView({ model: model });
 
       model.fetch();
+
+      // Fetch a new street segment and questions
+      $('a#next-survey').click(function(){
+        model.fetch();
+      });
     }
   });
 })(StreetScore);
