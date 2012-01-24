@@ -1,3 +1,4 @@
+from djangorestframework import mixins
 from djangorestframework import parsers
 from djangorestframework import resources
 from djangorestframework import views
@@ -51,6 +52,13 @@ class RatingInstanceView (views.InstanceModelView):
 class RatingListView (views.ListOrCreateModelView):
     resource = RatingResource
 
+
+class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
+    resource = RatingResource
+
+    @property
+    def queryset(self):
+        return models.Rating.objects.order_by('segment', 'block_index')
 
 ##
 # The definition of a survey session resource, and its view.
