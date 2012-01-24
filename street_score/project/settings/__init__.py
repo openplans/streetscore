@@ -1,4 +1,7 @@
-import local
+try:
+    import local
+except ImportError:
+    local = None
 
 import os
 def abs_dir(sub_path):
@@ -16,8 +19,26 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {}
-DATABASES.update(local.DATABASES)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'streetscore',                      # Or path to database file if using sqlite3.
+        'USER': 'postgres',                      # Not used with sqlite3.
+        'PASSWORD': 'postgres',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    },
+    'project_db': {
+        'ENGINE':   'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME':     os.environ.get('STREETSCORE_DB_NAME', 'streetscore'),                      # Or path to database file if using sqlite3.
+        'USER':     os.environ.get('STREETSCORE_DB_USER', 'postgres'),                      # Not used with sqlite3.
+        'PASSWORD': os.environ.get('STREETSCORE_DB_PASS', 'postgres'),                  # Not used with sqlite3.
+        'HOST':     os.environ.get('STREETSCORE_DB_HOST', 'localhost'),                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT':     os.environ.get('STREETSCORE_DB_PORT', ''),                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+if local:
+    DATABASES.update(local.DATABASES)
 
 class ProjectRouter(object):
     """
@@ -101,7 +122,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = local.SECRET_KEY
+SECRET_KEY = local.SECRET_KEY if local else os.environ.get('STREETSCORE_SECURITY_KEY', '12345')
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
