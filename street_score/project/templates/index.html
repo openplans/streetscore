@@ -50,6 +50,7 @@
     <div class="container-fluid">
       <div class="sidebar">
         <div class="well">
+          <ul id="rating-list"></ul>
         </div>
       </div>
 
@@ -91,7 +92,6 @@
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
 
-    {% mustachejs "ratings" %}
     {% mustachejs "rating" %}
 
   </body>

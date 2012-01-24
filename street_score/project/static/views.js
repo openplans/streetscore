@@ -32,33 +32,22 @@ var StreetScore = StreetScore || {};
    */
   S.RatingsView = Backbone.View.extend({
     initialize: function() {
-      this.$container = $('.well');
+      this.$container = $('ul#rating-list');
 
       // Bind model change event
       this.model.bind('change', this.render, this);
     },
 
     render: function() {
-      var template = Mustache.template('ratings')
-        , questions = this.model.get('questions')
+      var questions = this.model.get('questions')
         , ratings = new S.RatingCollection()
         , listView = this;
-
-      // Render the containing rating list into the sidebar (called .well).
-      // The individual rating items will be placed into this list below.  We
-      // do this instead of having template system loop through the list so that
-      // we can actually construct views that the individual rating models are
-      // linked to.
-      var html = template.render({ 'ratings': ratings });
-      console.log(this.$container);
-      console.log(html);
-      this.$container.html(html);
 
       // As we add new ratings to the collection, we want new views to be
       // associated with them.
       ratings.bind('add', function(rating) {
         var itemView = new S.RatingView({model: rating});
-        listView.$container.find('ul#rating-list').append(itemView.render().el);
+        listView.$container.append(itemView.render().el);
       });
 
       // Loop through the questions, creating a corresponding RatingModel for
