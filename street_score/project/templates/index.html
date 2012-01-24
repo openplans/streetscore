@@ -16,19 +16,7 @@
     <!-- Le styles -->
     {% bootstrap_css %}
 
-    <style type="text/css">
-      body {
-        padding-top: 60px;
-      }
-
-      #streetview-container {
-        height:450px;
-      }
-
-      #rating-list li {
-        list-style:none;
-      }
-    </style>
+    <link href="{{ STATIC_URL }}style.css" type="text/css" rel="stylesheet" />
 
     <!-- Le fav and touch icons -->
     <link rel="shortcut icon" href="images/favicon.ico">
@@ -51,6 +39,7 @@
       <div class="sidebar">
         <div class="well">
           <ul id="rating-list"></ul>
+          <a href="#" class="btn large primary">Next</a>
         </div>
       </div>
 
