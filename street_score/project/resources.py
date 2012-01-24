@@ -58,6 +58,21 @@ class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
     def queryset(self):
         return models.Rating.objects.order_by('segment', 'block_index')
 
+
+class BlockRatingResource (RatingResource):
+    model = models.Rating
+    exclude = ['created_datetime', 'updated_datetime', 'score']
+    include = ['question', 'point', 'score__avg']
+
+class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
+    resource = BlockRatingResource
+
+    @property
+    def queryset(self):
+        from django.db.models import Avg
+        return models.Rating.objects.annotate(Avg('score')).order_by('segment', 'block_index')
+
+
 ##
 # The definition of a survey session resource, and its view.
 #
