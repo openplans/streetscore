@@ -58,7 +58,7 @@ class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
 
 class BlockRatingResource (RatingResource):
     model = models.Rating
-    exclude = ['created_datetime', 'updated_datetime', 'score']
+    exclude = ['created_datetime', 'updated_datetime', 'score', 'segment__id']
     include = ['segment', 'question', 'point', 'score__avg']
 
     def segment(self, rating):
