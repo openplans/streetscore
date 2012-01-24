@@ -2,6 +2,8 @@ var StreetScore = StreetScore || {};
 
 (function(S) {
   S.StreetView = Backbone.View.extend({
+    el: '.content',
+
     initialize: function() {
       // Init Google Street View
       this.sv = new google.maps.StreetViewService();
@@ -19,27 +21,35 @@ var StreetScore = StreetScore || {};
     render: function() {
       var latLng = new google.maps.LatLng(this.model.get('point').lat, this.model.get('point').lon),
         heading = 0,
-        rotate_id,
         view = this;
 
-      // Stop rotating street view on mousedown
-      $('#streetview-container').mousedown(function(){
-        clearInterval(rotate_id);
-      });
-
       this.sv.getPanoramaByLocation(latLng, 50, function(data, status){
-        view.pano.setPano(data.location.pano);
-        view.pano.setVisible(true);
+        if (status === google.maps.StreetViewStatus.OK) {
+          view.pano.setPano(data.location.pano);
+          view.pano.setVisible(true);
 
-        // Rotate street view automatically by default
-        rotate_id = setInterval(function(){
-          view.pano.setPov({
-            heading: heading+=0.5,
-            pitch: 5,
-            zoom: 1
-          });
-        }, 30);
+          // Rotate street view automatically by default
+          view.rotate_id = setInterval(function(){
+            view.pano.setPov({
+              heading: heading+=0.5,
+              pitch: 5,
+              zoom: 1
+            });
+          }, 40);
+        } else {
+          // No results, fetch the next segment
+          view.model.fetch();
+        }
       });
+    },
+
+    events : {
+      'mousedown #streetview-container' : 'stopRotation'
+    },
+
+    stopRotation: function() {
+      // Stop rotating street view on mousedown
+      clearInterval(this.rotate_id);
     }
   });
 
@@ -130,9 +140,8 @@ var StreetScore = StreetScore || {};
 
     initialize: function() {
       this.model = new S.SurveySessionModel();
-
-      var streetView = new StreetScore.StreetView({ model: this.model }),
-          ratingsView = new StreetScore.RatingsView({ model: this.model });
+      this.streetView = new StreetScore.StreetView({ model: this.model });
+      this.ratingsView = new StreetScore.RatingsView({ model: this.model });
 
       this.fetch();
     },
@@ -142,6 +151,7 @@ var StreetScore = StreetScore || {};
     },
 
     fetch: function() {
+      this.streetView.stopRotation();
       this.model.fetch();
     }
   });
