@@ -38,7 +38,7 @@ class ProjectRouter(object):
     def allow_syncdb(self, db, model):
         return True
 
-DATABASE_ROUTERS = [ProjectRouter()]
+#DATABASE_ROUTERS = [ProjectRouter()]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
