@@ -1,5 +1,6 @@
-from djangorestframework import views
+from djangorestframework import parsers
 from djangorestframework import resources
+from djangorestframework import views
 from . import models
 
 
@@ -18,7 +19,33 @@ class RatingResource (resources.ModelResource):
     def segment(self, rating):
         return rating.segment.id
 
+class RatingJSONParser (parsers.JSONParser):
+    def parse(self, stream):
+        parsed_data, parsed_files = super(RatingJSONParser, self).parse(stream)
+
+        # Backbone.js likes to send up all the data in a model, whether you want
+        # it to or not.  This means that we get attributes that we don't want,
+        # like `id` and `url`.  Here, we're ignoring those attributes.
+        #
+        # I don't like this as a solution; I feel like I should be able to
+        # clean my data on the client before saving (without having to override
+        # the entire sync method).  I may have to extend the Backbone.Model
+        # class to be a little smarter.
+
+        if u'id' in parsed_data:
+            del parsed_data[u'id']
+        if u'url' in parsed_data:
+            del parsed_data[u'url']
+        if u'question' in parsed_data:
+            del parsed_data[u'question']
+
+        return parsed_data, parsed_files
+
 class RatingInstanceView (views.InstanceModelView):
+    parsers = [parser for parser in parsers.DEFAULT_PARSERS
+               if parser is not parsers.JSONParser]
+    parsers.insert(0, RatingJSONParser)
+
     resource = RatingResource
 
 class RatingListView (views.ListOrCreateModelView):

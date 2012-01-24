@@ -9,6 +9,19 @@ class TestRatingResource(TestCase):
         super(TestRatingResource, self).setUp()
         self.req = RequestFactory()
 
+    def test_parsers(self):
+        from project.resources import RatingInstanceView, RatingJSONParser
+        from djangorestframework.parsers import JSONParser
+        from StringIO import StringIO
+
+        self.assertEqual(len(RatingInstanceView.parsers), 4)
+        self.assertNotIn(JSONParser, RatingInstanceView.parsers)
+        self.assertIn(RatingJSONParser, RatingInstanceView.parsers)
+
+        parser = RatingJSONParser(None)  # None for the view
+        json_string = StringIO('{"criterion":3,"question":"How much do you like it?","score":"4","segment":456,"block_index":5239,"url":"http://localhost:8000/ratings/13","id":13}')
+        self.assertNotIn(u'id', parser.parse(json_string))
+
     def test_read(self):
         from project.models import Rating, Criterion, Segment
         criterion = Criterion.objects.create(prompt='Hello?')

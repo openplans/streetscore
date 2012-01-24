@@ -41,11 +41,11 @@ class Rating (TimeStampedModel):
         return Block(self.segment, self.block_index)
 
     @property
-    def question(self, rating):
+    def question(self):
         """
         The question string to which the rating is a response.
         """
-        return rating.criterion.prompt
+        return self.criterion.prompt
 
 
 class Criterion (models.Model):

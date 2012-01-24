@@ -106,11 +106,6 @@ var StreetScore = StreetScore || {};
       var newScore = this.$('[name="score"]').val();
       this.model.set({'score': newScore});
 
-      // HACK: I'm not sure the right way to do this.  I want to not send these
-      //       two attributes to the server.
-      this.model.unset('id');
-      this.model.unset('url');
-
       this.model.save();
     }
   });
