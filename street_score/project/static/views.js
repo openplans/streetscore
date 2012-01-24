@@ -105,8 +105,7 @@ var StreetScore = StreetScore || {};
 
     setScore: function() {
       var newScore = this.$('.star').raty('score');
-      this.model.set({'score': newScore});
-      this.model.save();
+      this.model.save({'score': newScore});
     }
   });
 
