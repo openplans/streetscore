@@ -4,6 +4,7 @@ except ImportError:
     local = None
 
 try:
+    import json
     with open('/home/dotcloud/environment.json') as f:
         env = json.load(f)
 except IOError:
