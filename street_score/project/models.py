@@ -165,10 +165,9 @@ class SurveySession (object):
         """
         Load a set of questions at random.
         """
-        ten_least_answered_questions = (
+        all_questions = (
             Criterion.objects.all()
                 .annotate(num_ratings=models.Count('ratings'))
-                .order_by('num_ratings')[:10]
         )
-        self.__questions = random.sample(ten_least_answered_questions, 2)
+        self.__questions = all_questions
         return self.__questions
