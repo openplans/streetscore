@@ -108,17 +108,23 @@ var StreetScore = StreetScore || {};
   });
 
   S.AppView = Backbone.View.extend({
+    el: '.well',
+
     initialize: function() {
-      var model = new S.SurveySessionModel(),
-          streetView = new StreetScore.StreetView({ model: model }),
-          ratingsView = new StreetScore.RatingsView({ model: model });
+      this.model = new S.SurveySessionModel();
 
-      model.fetch();
+      var streetView = new StreetScore.StreetView({ model: this.model }),
+          ratingsView = new StreetScore.RatingsView({ model: this.model });
 
-      // Fetch a new street segment and questions
-      $('a#next-survey').click(function(){
-        model.fetch();
-      });
+      this.fetch();
+    },
+
+    events: {
+      "click a#next-survey": "fetch"
+    },
+
+    fetch: function() {
+      this.model.fetch();
     }
   });
 })(StreetScore);
