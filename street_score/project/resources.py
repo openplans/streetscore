@@ -51,11 +51,7 @@ class RatingInstanceView (views.InstanceModelView):
 
     resource = RatingResource
 
-class RatingListView (views.ListOrCreateModelView):
-    resource = RatingResource
-
-
-class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
+class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
     resource = RatingResource
 
     @property
