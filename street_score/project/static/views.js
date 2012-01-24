@@ -81,16 +81,23 @@ var StreetScore = StreetScore || {};
       this.model.bind('change', this.render, this);
     },
 
-    events: {
-      'change [name="score"]' : 'setScore'
-    },
-
     render: function() {
       var template = Mustache.template('rating')
         , rating = this.model
         , html = template.render(rating.toJSON());
 
       $(this.el).html(html);
+
+      $('.star', this.el).raty({
+        // HACK: not ideal
+        path: '/static/raty',
+        hintList: ['bad', 'poor', 'average', 'good', 'great'],
+        click: function(score, evt) {
+          // TODO: call setScore
+          alert('score: ' + score);
+        }
+      });
+
       return this;
     },
 

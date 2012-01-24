@@ -30,3 +30,7 @@ body {
 a#next-survey {
   margin-top:15px;
 }
+
+.star {
+  float:right;
+}
