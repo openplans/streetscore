@@ -10,3 +10,6 @@ build/
 
 # Private info
 street_score/project/settings/local.py
+
+# Mac
+.DS_Store

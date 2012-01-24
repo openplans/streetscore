@@ -11,6 +11,6 @@ var StreetScore = StreetScore || {};
   S.RatingCollection = Backbone.Collection.extend({
     url: '/ratings/',
     model: S.RatingModel
-  })
+  });
 
 })(StreetScore);

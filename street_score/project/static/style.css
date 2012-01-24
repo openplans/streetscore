@@ -1,0 +1,36 @@
+body {
+  padding-top: 60px;
+}
+
+#streetview-container {
+  height:450px;
+}
+
+.container-fluid .sidebar {
+  width:340px;
+}
+
+.container-fluid .content {
+  margin-left:360px;
+}
+
+#rating-list {
+  margin:0;
+}
+
+#rating-list li {
+  list-style:none;
+  margin:5px;
+}
+
+#rating-list li label {
+  float:none;
+}
+
+a#next-survey {
+  margin-top:15px;
+}
+
+.star {
+  float:right;
+}
