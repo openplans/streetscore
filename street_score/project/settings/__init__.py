@@ -19,6 +19,27 @@ MANAGERS = ADMINS
 DATABASES = {}
 DATABASES.update(local.DATABASES)
 
+class ProjectRouter(object):
+    """
+    A router to send all database traffic to the project_db.  We do this to
+    avoid having to use the database that Heroku automatically assigns.
+
+    """
+
+    def db_for_read(self, model, **hints):
+        return 'project_db'
+
+    def db_for_write(self, model, **hints):
+        return 'project_db'
+
+    def allow_relation(self, obj1, obj2, **hints):
+        return 'project_db'
+
+    def allow_syncdb(self, db, model):
+        return True
+
+DATABASE_ROUTERS = [ProjectRouter()]
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
