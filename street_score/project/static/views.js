@@ -27,6 +27,9 @@ var StreetScore = StreetScore || {};
     }
   });
 
+  /**
+   * The view class for a list of ratings.
+   */
   S.RatingsView = Backbone.View.extend({
     initialize: function() {
       this.$container = $('.well');
@@ -34,24 +37,59 @@ var StreetScore = StreetScore || {};
       // Bind model change event
       this.model.bind('change', this.render, this);
     },
-    render: function() {
-      var template = Mustache.template('ratings'),
-        questions = this.model.get('questions'),
-        ratings = [];
 
+    render: function() {
+      var template = Mustache.template('ratings')
+        , questions = this.model.get('questions')
+        , ratings = new S.RatingCollection()
+        , listView = this;
+
+      // Render the containing rating list into the sidebar (called .well).
+      // The individual rating items will be placed into this list below.  We
+      // do this instead of having template system loop through the list so that
+      // we can actually construct views that the individual rating models are
+      // linked to.
+      var html = template.render({ 'ratings': ratings });
+      console.log(this.$container);
+      console.log(html);
+      this.$container.html(html);
+
+      // Loop through the questions, creating a corresponding RatingModel for
+      // each.
       _.each(questions, function(obj, i){
-        ratings.push({
+        var rating, itemView;
+
+        rating = new S.RatingModel({
           'criterion': obj.id,
           'question': obj.prompt,
           'score': 0
         });
+        itemView = new S.RatingView({model: rating});
+        listView.$container.find('ul#rating-list').append(itemView.render().el);
       });
 
-      var html = template.render({ 'ratings': ratings });
-      console.log(this.$container);
-      console.log(html);
+      return this;
+    }
+  });
 
-      this.$container.html(html);
+  /**
+   * The view class for a single rating model.  Constructed as a sub-view of
+   * a RatingsView.
+   */
+  S.RatingView = Backbone.View.extend({
+    tagName: 'li',
+
+    initialize: function() {
+      this.model.bind('change', this.render, this);
+    },
+
+    render: function() {
+      var template = Mustache.template('rating')
+        , rating = this.model
+        , html = template.render(rating.toJSON());
+
+      $(this.el).html(html);
+      return this;
     }
   });
 
