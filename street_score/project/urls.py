@@ -24,7 +24,7 @@ urlpatterns = patterns('',
     url(r'^ratings/$',
         resources.RatingListView.as_view(),
         name='rating_list'),
-    url(r'^ratings/(P<id>\d+)$',
+    url(r'^ratings/(?P<id>\d+)$',
         resources.RatingInstanceView.as_view(),
         name='rating_instance'),
 
