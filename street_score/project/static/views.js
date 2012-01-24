@@ -68,7 +68,9 @@ var StreetScore = StreetScore || {};
         ratings.add({
           'criterion': question.id,
           'question': question.prompt,
-          'score': 0
+          'score': 0,
+          'segment': listView.model.get('segment_id'),
+          'block_index': listView.model.get('block_index')
         });
       });
 
@@ -87,6 +89,10 @@ var StreetScore = StreetScore || {};
       this.model.bind('change', this.render, this);
     },
 
+    events: {
+      'change [name="score"]' : 'setScore'
+    },
+
     render: function() {
       var template = Mustache.template('rating')
         , rating = this.model
@@ -94,6 +100,18 @@ var StreetScore = StreetScore || {};
 
       $(this.el).html(html);
       return this;
+    },
+
+    setScore: function() {
+      var newScore = this.$('[name="score"]').val();
+      this.model.set({'score': newScore});
+
+      // HACK: I'm not sure the right way to do this.  I want to not send these
+      //       two attributes to the server.
+      this.model.unset('id');
+      this.model.unset('url');
+
+      this.model.save();
     }
   });
 

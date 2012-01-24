@@ -2,12 +2,21 @@ from djangorestframework import views
 from djangorestframework import resources
 from . import models
 
+
+##
+# The definition of a rating resource, and its corresponding views.
+#
+
 class RatingResource (resources.ModelResource):
     model = models.Rating
+    exclude = ['created_datetime', 'updated_datetime']
+    include = ['url']
 
-    @property
-    def question(self, rating):
-        return rating.criterion.prompt
+    def criterion(self, rating):
+        return rating.criterion.id
+
+    def segment(self, rating):
+        return rating.segment.id
 
 class RatingInstanceView (views.InstanceModelView):
     resource = RatingResource
@@ -16,8 +25,11 @@ class RatingListView (views.ListOrCreateModelView):
     resource = RatingResource
 
 
-class SurveySessionResource (resources.Resource):
+##
+# The definition of a survey session resource, and its view.
+#
 
+class SurveySessionResource (resources.Resource):
     model = models.SurveySession  # Can I get away with this?
     fields = (
         'questions',

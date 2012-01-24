@@ -40,6 +40,13 @@ class Rating (TimeStampedModel):
         """
         return Block(self.segment, self.block_index)
 
+    @property
+    def question(self, rating):
+        """
+        The question string to which the rating is a response.
+        """
+        return rating.criterion.prompt
+
 
 class Criterion (models.Model):
     prompt = models.TextField()
