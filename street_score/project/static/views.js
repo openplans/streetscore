@@ -5,24 +5,40 @@ var StreetScore = StreetScore || {};
     initialize: function() {
       // Init Google Street View
       this.sv = new google.maps.StreetViewService();
-      this.pano =  new google.maps.StreetViewPanorama(document.getElementById('streetview-container'));
+      this.pano =  new google.maps.StreetViewPanorama(document.getElementById('streetview-container'), {
+        linksControl: false,
+        zoomControlOptions: {
+          style: google.maps.ZoomControlStyle.SMALL
+        }
+      });
 
       // Bind model change event
       this.model.bind('change', this.render, this);
     },
 
     render: function() {
-      var latLng = new google.maps.LatLng(this.model.get('point').lat, this.model.get('point').lon);
-      var view = this;
+      var latLng = new google.maps.LatLng(this.model.get('point').lat, this.model.get('point').lon),
+        heading = 0,
+        rotate_id,
+        view = this;
+
+      // Stop rotating street view on mousedown
+      $('#streetview-container').mousedown(function(){
+        clearInterval(rotate_id);
+      });
 
       this.sv.getPanoramaByLocation(latLng, 50, function(data, status){
         view.pano.setPano(data.location.pano);
-        view.pano.setPov({
-          heading: 270,
-          pitch: 0,
-          zoom: 1
-        });
         view.pano.setVisible(true);
+
+        // Rotate street view automatically by default
+        rotate_id = setInterval(function(){
+          view.pano.setPov({
+            heading: heading+=0.5,
+            pitch: 5,
+            zoom: 1
+          });
+        }, 30);
       });
     }
   });
