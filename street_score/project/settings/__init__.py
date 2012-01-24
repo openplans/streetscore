@@ -3,6 +3,12 @@ try:
 except ImportError:
     local = None
 
+try:
+    with open('/home/dotcloud/environment.json') as f:
+        env = json.load(f)
+except IOError:
+    env = {}
+
 import os
 def abs_dir(sub_path):
     this_dir = os.path.dirname(__file__)
@@ -30,11 +36,11 @@ DATABASES = {
     },
     'project_db': {
         'ENGINE':   'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME':     os.environ.get('STREETSCORE_DB_NAME', 'streetscore'),                      # Or path to database file if using sqlite3.
-        'USER':     os.environ.get('STREETSCORE_DB_USER', 'postgres'),                      # Not used with sqlite3.
-        'PASSWORD': os.environ.get('STREETSCORE_DB_PASS', 'postgres'),                  # Not used with sqlite3.
-        'HOST':     os.environ.get('STREETSCORE_DB_HOST', 'localhost'),                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT':     os.environ.get('STREETSCORE_DB_PORT', ''),                      # Set to empty string for default. Not used with sqlite3.
+        'NAME':     os.environ.get('STREETSCORE_DB_NAME', env.get('STREETSCORE_DB_NAME', 'streetscore')),                      # Or path to database file if using sqlite3.
+        'USER':     os.environ.get('STREETSCORE_DB_USER', env.get('STREETSCORE_DB_USER', 'postgres')),                      # Not used with sqlite3.
+        'PASSWORD': os.environ.get('STREETSCORE_DB_PASS', env.get('STREETSCORE_DB_PASS', 'postgres')),                  # Not used with sqlite3.
+        'HOST':     os.environ.get('STREETSCORE_DB_HOST', env.get('STREETSCORE_DB_HOST', 'localhost')),                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT':     os.environ.get('STREETSCORE_DB_PORT', env.get('STREETSCORE_DB_PORT', '')),                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 if local:
@@ -122,7 +128,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = local.SECRET_KEY if local else os.environ.get('STREETSCORE_SECURITY_KEY', '12345')
+SECRET_KEY = local.SECRET_KEY if local else os.environ.get('STREETSCORE_SECURITY_KEY', env.get('STREETSCORE_SECRET_KEY', '12345'))
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
