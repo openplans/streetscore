@@ -84,7 +84,8 @@ var StreetScore = StreetScore || {};
     render: function() {
       var template = Mustache.template('rating')
         , rating = this.model
-        , html = template.render(rating.toJSON());
+        , html = template.render(rating.toJSON())
+        , view = this;
 
       $(this.el).html(html);
 
@@ -92,19 +93,19 @@ var StreetScore = StreetScore || {};
         // HACK: not ideal
         path: '/static/raty',
         hintList: ['bad', 'poor', 'average', 'good', 'great'],
-        click: function(score, evt) {
-          // TODO: call setScore
-          alert('score: ' + score);
-        }
+        start: rating.get('score') || 0
       });
 
       return this;
     },
 
-    setScore: function() {
-      var newScore = this.$('[name="score"]').val();
-      this.model.set({'score': newScore});
+    events : {
+      'click .star' : 'setScore'
+    },
 
+    setScore: function() {
+      var newScore = this.$('.star').raty('score');
+      this.model.set({'score': newScore});
       this.model.save();
     }
   });
