@@ -41,7 +41,7 @@ DATABASES = {
         'USER':     os.environ.get('STREETSCORE_DB_USER', env.get('STREETSCORE_DB_USER', 'postgres')),                      # Not used with sqlite3.
         'PASSWORD': os.environ.get('STREETSCORE_DB_PASS', env.get('STREETSCORE_DB_PASS', 'postgres')),                  # Not used with sqlite3.
         'HOST':     os.environ.get('STREETSCORE_DB_HOST', env.get('STREETSCORE_DB_HOST', 'localhost')),                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT':     os.environ.get('STREETSCORE_DB_PORT', env.get('STREETSCORE_DB_PORT', '')),                      # Set to empty string for default. Not used with sqlite3.
+        'PORT':     int(os.environ.get('STREETSCORE_DB_PORT', env.get('STREETSCORE_DB_PORT', '5432'))),                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 if local:
