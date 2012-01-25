@@ -1,0 +1,2 @@
+mkdir -p /home/dotcloud/data/media /home/dotcloud/data/static
+python street_score/manage.py collectstatic --noinput
