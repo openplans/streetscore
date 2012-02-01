@@ -188,6 +188,8 @@ INSTALLED_APPS = (
     'project',
 )
 
+SOUTH_TESTS_MIGRATE = False
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 SOUTH_AUTO_FREEZE_APP = True
 

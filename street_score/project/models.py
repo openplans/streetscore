@@ -22,10 +22,16 @@ class Rating (TimeStampedModel):
     """ The criterion that this rating is for.
         """
 
-    segment = models.ForeignKey('Segment', related_name='ratings')
-    block_index = models.PositiveIntegerField()
-    """ The block that this rating scores. A segment and a block_index together
-        uniquely identify a Block.
+    segment1 = models.ForeignKey('Segment', related_name='+')
+    block_index1 = models.PositiveIntegerField()
+    """ The first block that this rating compares. A segment and a block_index together
+        uniquely identify a Block. Not including a related_name until needed. Tricky.
+        """
+
+    segment2 = models.ForeignKey('Segment', related_name='+')
+    block_index2 = models.PositiveIntegerField()
+    """ The second block that this rating compares. A segment and a block_index together
+        uniquely identify a Block. Not including a related_name until needed. Tricky.
         """
 
     score = models.PositiveIntegerField()

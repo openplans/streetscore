@@ -2,11 +2,14 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from nose.tools import *
 
+
 class TestRatingResource(TestCase):
     """Tests on RatingResource"""
 
     def setUp(self):
         super(TestRatingResource, self).setUp()
+        from project.models import Segment
+        Segment.objects.all().delete()
         self.req = RequestFactory()
 
     def test_parsers(self):
@@ -26,9 +29,9 @@ class TestRatingResource(TestCase):
         from project.models import Rating, Criterion, Segment
         criterion = Criterion.objects.create(prompt='Hello?')
         segment = Segment.objects.create(id=123)
-        rating = Rating.objects.create(criterion=criterion, segment=segment, block_index=2, score=5)
+        rating = Rating.objects.create(criterion=criterion, segment1=segment, block_index1=2, segment2=segment, block_index2=2, score=5)
 
-        from project.resources import RatingResource, RatingInstanceView
+        from project.resources import RatingInstanceView
         request = self.req.get('/ratings/{}'.format(rating.id))
         view = RatingInstanceView()
 
@@ -39,11 +42,11 @@ class TestRatingResource(TestCase):
         from project.models import Rating, Criterion, Segment
         criterion = Criterion.objects.create(prompt='Hello?')
         segment = Segment.objects.create(id=123)
-        rating = Rating.objects.create(criterion=criterion, segment=segment, block_index=2, score=5)
+        rating = Rating.objects.create(criterion=criterion, segment1=segment, block_index1=2, segment2=segment, block_index2=2, score=5)
 
         assert_equal(Rating.objects.count(), 1)
 
-        from project.resources import RatingResource, RatingInstanceView
+        from project.resources import RatingInstanceView
         request = self.req.delete('/ratings/{}'.format(rating.id))
         view = RatingInstanceView()
 
@@ -56,13 +59,15 @@ class TestRatingResource(TestCase):
         criterion2 = Criterion.objects.create(prompt='Goodbye!')
         segment1 = Segment.objects.create(id=123)
         segment2 = Segment.objects.create(id=456)
-        rating = Rating.objects.create(criterion=criterion1, segment=segment1, block_index=2, score=5)
+        rating = Rating.objects.create(criterion=criterion1, segment1=segment1, block_index1=2, segment2=segment1, block_index2=2, score=5)
 
         from project.resources import RatingResource, RatingInstanceView
         request = self.req.put('/ratings/{}'.format(rating.id), data={
-            'segment': segment2.id,
+            'segment2': segment2.id,
+            'block_index2': 14,
+            'segment1': segment2.id,
+            'block_index1': 14,
             'criterion': criterion2.id,
-            'block_index': 7,
             'score': 2})
         view = RatingInstanceView()
         view.request = request
@@ -70,21 +75,24 @@ class TestRatingResource(TestCase):
         response = view.put(request, rating.id)
         self.assertEquals(rating, response)
         self.assertEqual(response.criterion, criterion2)
-        self.assertEqual(response.segment, segment2)
-        self.assertEqual(response.block_index, 7)
+        self.assertEqual(response.segment2, segment2)
+        self.assertEqual(response.block_index2, 14)
         self.assertEqual(response.score, 2)
 
     def test_create(self):
         from project.models import Rating, Criterion, Segment
         criterion = Criterion.objects.create(prompt='Hello?')
-        segment = Segment.objects.create(id=123)
+        segment1 = Segment.objects.create(id=123)
+        segment2 = Segment.objects.create(id=456)
         assert_equal(Rating.objects.count(), 0)
 
-        from project.resources import RatingResource, RatingListView
+        from project.resources import RatingListView
         request = self.req.post('/ratings/', data={
-            'segment': segment.id,
+            'segment1': segment1.id,
+            'block_index1': 7,
+            'segment2': segment2.id,
+            'block_index2': 14,
             'criterion': criterion.id,
-            'block_index': 7,
             'score': 2})
         view = RatingListView()
         view.request = request
@@ -92,6 +100,6 @@ class TestRatingResource(TestCase):
         response = view.post(request)
         self.assertEquals(Rating.objects.count(), 1)
         self.assertEqual(response.cleaned_content.criterion, criterion)
-        self.assertEqual(response.cleaned_content.segment, segment)
-        self.assertEqual(response.cleaned_content.block_index, 7)
+        self.assertEqual(response.cleaned_content.segment1, segment1)
+        self.assertEqual(response.cleaned_content.block_index1, 7)
         self.assertEqual(response.cleaned_content.score, 2)
