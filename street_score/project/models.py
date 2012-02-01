@@ -71,7 +71,7 @@ class Segment (models.Model):
         managed = False
 
     def __unicode__(self):
-        return 'Segement #{}'.format(self.id)
+        return 'Segement #{0}'.format(self.id)
 
     @property
     def blocks(self):
