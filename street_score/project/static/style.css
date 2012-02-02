@@ -1,17 +1,5 @@
-body {
-  padding-top: 60px;
-}
-
 #streetview-container {
   height:650px;
-}
-
-.container-fluid .sidebar {
-  width:340px;
-}
-
-.container-fluid .content {
-  margin-left:360px;
 }
 
 #rating-list {

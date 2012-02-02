@@ -1,4 +1,5 @@
 {% load mustachejs %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +14,8 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.responsive.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}style.css" type="text/css" rel="stylesheet" />
 
     <!-- Le fav and touch icons -->
@@ -25,8 +27,8 @@
 
   <body>
 
-    <div class="topbar">
-      <div class="topbar-inner">
+    <div class="navbar">
+      <div class="navbar-inner">
         <div class="container-fluid">
           <a class="brand" href="#">Street Score</a>
         </div>
@@ -34,25 +36,30 @@
     </div>
 
     <div class="container-fluid">
-      <div class="sidebar">
-        <div class="well">
-          <ul id="rating-list"></ul>
-          <a href="#" id="next-survey" class="btn large primary">Next</a>
-        </div>
-      </div>
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul id="rating-list" class="nav nav-list"></ul>
+            <a href="#" id="next-survey" class="btn btn-primary btn-large">Next</a>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <!-- Street View Goes Here -->
+          <div id="streetview-container"></div>
+        </div><!--/span-->
+      </div><!--/row-->
 
-      <div class="content">
-        <!-- Street View Goes Here -->
-        <div id="streetview-container"></div>
-        <footer>
-          <p>&copy; OpenPlans 2012</p>
-        </footer>
-      </div>
-    </div>
+      <hr>
+
+      <footer>
+        <p>&copy; OpenPlans 2012</p>
+      </footer>
+
+    </div><!--/.fluid-container-->
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/django.mustache.js"></script>
     <script src="{{ STATIC_URL }}underscore.js"></script>
