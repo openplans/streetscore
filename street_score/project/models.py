@@ -162,9 +162,7 @@ class SurveySession (object):
               about them first.
         """
         ten_least_rated_segments = (
-            Segment.objects.all()
-                .annotate(num_ratings=models.Count('ratings'))
-                .order_by('num_ratings')[:10]
+            Segment.objects.all()[:10]
         )
 
         segment = random.choice(ten_least_rated_segments)
