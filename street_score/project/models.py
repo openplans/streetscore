@@ -38,6 +38,10 @@ class Rating (TimeStampedModel):
     """ The rating score.
         """
 
+    def __unicode__(self):
+        return 'Rating of Segment #{0}, block #{1} for "{2}"'.format(
+            self.segment.id, self.block_index, self.criterion.prompt)
+
     @property
     def block(self):
         """
@@ -77,7 +81,7 @@ class Segment (models.Model):
         managed = False
 
     def __unicode__(self):
-        return 'Segement #{}'.format(self.id)
+        return 'Segement #{0}'.format(self.id)
 
     @property
     def blocks(self):

@@ -8,9 +8,38 @@ class TestRatingResource(TestCase):
 
     def setUp(self):
         super(TestRatingResource, self).setUp()
+
+        # Create the segments table manually, since we're not managing it with
+        # the ORM.  This SQL comes from running ``manage.py sqlall project`` at
+        # the command line.
+        segments_table_sql = """
+            CREATE TABLE "philly_street_osm_line" (
+                "osm_id" integer NOT NULL PRIMARY KEY
+            )
+            ;
+
+            SELECT AddGeometryColumn('philly_street_osm_line', 'way', 900913, 'LINESTRING', 2);
+            CREATE INDEX "philly_street_osm_line_way_id" ON "philly_street_osm_line" USING GIST ( "way" GIST_GEOMETRY_OPS );
+            COMMIT;
+        """
+        from django.db import connection
+        cursor = connection.cursor()
+        cursor.execute(segments_table_sql)
+
         from project.models import Segment
         Segment.objects.all().delete()
+
         self.req = RequestFactory()
+
+    def tearDown(self):
+        super(TestRatingResource, self).tearDown()
+
+        from django.db import connection
+        cursor = connection.cursor()
+        cursor.execute("""
+            DROP TABLE philly_street_osm_line;
+            COMMIT;
+        """)
 
     def test_parsers(self):
         from project.resources import RatingInstanceView, RatingJSONParser
@@ -61,7 +90,7 @@ class TestRatingResource(TestCase):
         segment2 = Segment.objects.create(id=456)
         rating = Rating.objects.create(criterion=criterion1, segment1=segment1, block_index1=2, segment2=segment1, block_index2=2, score=5)
 
-        from project.resources import RatingResource, RatingInstanceView
+        from project.resources import  RatingInstanceView
         request = self.req.put('/ratings/{}'.format(rating.id), data={
             'segment2': segment2.id,
             'block_index2': 14,
