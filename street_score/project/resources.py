@@ -41,12 +41,14 @@ class RatingJSONParser (parsers.JSONParser):
 
         return parsed_data, parsed_files
 
+
 class RatingInstanceView (views.InstanceModelView):
     parsers = [parser for parser in parsers.DEFAULT_PARSERS
                if parser is not parsers.JSONParser]
     parsers.insert(0, RatingJSONParser)
 
     resource = RatingResource
+
 
 class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
     resource = RatingResource
@@ -68,10 +70,11 @@ class BlockRatingResource (RatingResource):
         segment = models.Segment.objects.get(id=rating['segment__id'])
         block = models.Block(segment, rating['block_index'])
         p = block.characteristic_point
-        return { 'lat': p.y, 'lon': p.x }
+        return {'lat': p.y, 'lon': p.x}
 
     def question(self, rating):
         return rating['criterion__prompt']
+
 
 class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
     resource = BlockRatingResource
@@ -85,38 +88,40 @@ class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
 ##
 # The definition of a survey session resource, and its view.
 #
-
 class SurveySessionResource (resources.Resource):
     model = models.SurveySession  # Can I get away with this?
+
     fields = (
         'questions',
-        'segment_id',
-        'block_index',
-        'point'
+        'blocks'
     )
 
     def questions(self, session):
         return session.questions
 
-    def segment_id(self, session):
-        return session.block.segment.id
+    def blocks(self, session):
+        blocks_data = []
+        for block in session.blocks:
+            p = block.characteristic_point
+            block_data = {
+                'segment_id': block.segment.id,
+                'block_index': block.index,
+                'point': {'lat': p.y, 'lon': p.x}
+            }
+            blocks_data.append(block_data)
 
-    def block_index(self, session):
-        return session.block.index
+        return blocks_data
 
-    def point(self, session):
-        p = session.block.characteristic_point
-        return { 'lat': p.y, 'lon': p.x }
 
 class SurveySessionView (views.View):
     def get(self, request):
-        block_index = request.GET.get('block_index')
-        segment_id = request.GET.get('segment')
+        # block_index = request.GET.get('block_index')
+        # segment_id = request.GET.get('segment')
 
-        block = None
-        if segment_id is not None and block_index is not None:
-            segment = models.Segment.objects.get(segment_id)
-            block = models.Block(segment, int(block_index))
+        blocks = None
+        # if segment_id is not None and block_index is not None:
+        #     segment = models.Segment.objects.get(segment_id)
+        #     block = models.Block(segment, int(block_index))
 
-        survey_session = models.SurveySession(block=block)
+        survey_session = models.SurveySession(blocks=blocks)
         return SurveySessionResource().serialize_model(survey_session)

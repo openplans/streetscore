@@ -23,13 +23,13 @@ class Rating (TimeStampedModel):
         """
 
     segment1 = models.ForeignKey('Segment', related_name='+')
-    block_index1 = models.PositiveIntegerField()
+    block1_index = models.PositiveIntegerField()
     """ The first block that this rating compares. A segment and a block_index together
         uniquely identify a Block. Not including a related_name until needed. Tricky.
         """
 
     segment2 = models.ForeignKey('Segment', related_name='+')
-    block_index2 = models.PositiveIntegerField()
+    block2_index = models.PositiveIntegerField()
     """ The second block that this rating compares. A segment and a block_index together
         uniquely identify a Block. Not including a related_name until needed. Tricky.
         """
@@ -136,9 +136,9 @@ class SurveySession (object):
 
     """
 
-    def __init__(self, questions=None, block=None):
+    def __init__(self, questions=None, blocks=None):
         self.__questions = questions
-        self.__block = block
+        self.__blocks = blocks
 
     @property
     def questions(self):
@@ -148,15 +148,15 @@ class SurveySession (object):
         return self.__questions or self.init_questions()
 
     @property
-    def block(self):
+    def blocks(self):
         """
         Get the block for this session.
         """
-        return self.__block or self.init_block()
+        return self.__blocks or self.init_blocks()
 
-    def init_block(self):
+    def init_blocks(self):
         """
-        Load a block at random.
+        Load two blocks at random.
 
         TODO: Order the blocks by those that have the least questions answered
               about them first.
@@ -165,9 +165,9 @@ class SurveySession (object):
             Segment.objects.all()[:10]
         )
 
-        segment = random.choice(ten_least_rated_segments)
-        self.__block = random.choice(segment.blocks)
-        return self.__block
+        segments = random.sample(ten_least_rated_segments, 2)
+        self.__blocks = [random.choice(segment.blocks) for segment in segments]
+        return self.__blocks
 
     def init_questions(self):
         """

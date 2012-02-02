@@ -18,14 +18,14 @@ class Migration(SchemaMigration):
         # Adding field 'Rating.segment1'
         db.add_column('project_rating', 'segment1', self.gf('django.db.models.fields.related.ForeignKey')(default=segment.pk, related_name='+', to=orm['project.Segment']), keep_default=False)
 
-        # Adding field 'Rating.block_index1'
-        db.add_column('project_rating', 'block_index1', self.gf('django.db.models.fields.PositiveIntegerField')(default=0), keep_default=False)
+        # Adding field 'Rating.block1_index'
+        db.add_column('project_rating', 'block1_index', self.gf('django.db.models.fields.PositiveIntegerField')(default=0), keep_default=False)
 
         # Adding field 'Rating.segment2'
         db.add_column('project_rating', 'segment2', self.gf('django.db.models.fields.related.ForeignKey')(default=segment.pk, related_name='+', to=orm['project.Segment']), keep_default=False)
 
-        # Adding field 'Rating.block_index2'
-        db.add_column('project_rating', 'block_index2', self.gf('django.db.models.fields.PositiveIntegerField')(default=0), keep_default=False)
+        # Adding field 'Rating.block2_index'
+        db.add_column('project_rating', 'block2_index', self.gf('django.db.models.fields.PositiveIntegerField')(default=0), keep_default=False)
 
 
     def backwards(self, orm):
@@ -40,14 +40,14 @@ class Migration(SchemaMigration):
         # Deleting field 'Rating.segment1'
         db.delete_column('project_rating', 'segment1_id')
 
-        # Deleting field 'Rating.block_index1'
-        db.delete_column('project_rating', 'block_index1')
+        # Deleting field 'Rating.block1_index'
+        db.delete_column('project_rating', 'block1_index')
 
         # Deleting field 'Rating.segment2'
         db.delete_column('project_rating', 'segment2_id')
 
-        # Deleting field 'Rating.block_index2'
-        db.delete_column('project_rating', 'block_index2')
+        # Deleting field 'Rating.block2_index'
+        db.delete_column('project_rating', 'block2_index')
 
 
     models = {
@@ -58,8 +58,8 @@ class Migration(SchemaMigration):
         },
         'project.rating': {
             'Meta': {'object_name': 'Rating'},
-            'block_index1': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'block_index2': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'block1_index': ('django.db.models.fields.PositiveIntegerField', [], {}),
+            'block2_index': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'created_datetime': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'criterion': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'ratings'", 'to': "orm['project.Criterion']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
