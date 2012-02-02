@@ -2,7 +2,7 @@ var StreetScore = StreetScore || {};
 
 (function(S) {
   S.StreetView = Backbone.View.extend({
-    el: '.content',
+    el: 'body',
 
     initialize: function() {
       // Init Google Street View

@@ -22,3 +22,8 @@ a#next-survey {
 .star {
   float:right;
 }
+
+/* Override Bootstrap style to prevent issues with street view images */
+img {
+  max-width: none;
+}
