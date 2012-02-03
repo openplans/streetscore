@@ -1,7 +1,7 @@
 var StreetScore = StreetScore || {};
 
 (function(S) {
-  S.StreetView = Backbone.View.extend({
+  S.StreetviewView = Backbone.View.extend({
     initialize: function(options) {
       // Init Google Street View
       this.sv = new google.maps.StreetViewService();
@@ -38,7 +38,7 @@ var StreetScore = StreetScore || {};
           }, 40);
         } else {
           // No results, fetch the next segment
-          view.model.fetch();
+          view.model.next();
         }
       });
     },
@@ -53,10 +53,35 @@ var StreetScore = StreetScore || {};
     }
   });
 
+
+  S.StreetImageView = Backbone.View.extend({
+    initialize: function(options) {
+
+      // The index of the block in the array
+      this.index = this.options.index;
+
+      // Bind model change event
+      this.model.bind('change', this.render, this);
+    },
+
+    render: function() {
+      var block = this.model.get('blocks')[this.index],
+          self = this;
+
+      $(this.el).html('<img src="http://maps.googleapis.com/maps/api/streetview?size=600x600&location='+block.point.lat+','+block.point.lon+'&heading=0&fov=90&pitch=5&sensor=false" />');
+    },
+
+    stopRotation: function() {
+      //noop
+    }
+  });
+
   /**
    * The view class for a list of ratings.
    */
   S.RatingsView = Backbone.View.extend({
+    el: '#ratings-container',
+
     initialize: function() {
       // Bind model change event
       this.model.bind('change', this.render, this);
@@ -68,14 +93,14 @@ var StreetScore = StreetScore || {};
           ratings = new S.RatingCollection(),
           self = this;
 
+      // Empty the list before appending
+      $(this.el).empty();
+
       // As we add new ratings to the collection, we want new views to be
       // associated with them.
       ratings.bind('add', function(rating) {
-        var ratingView = new S.RatingView({
-          model: rating,
-          el: '#ratings-container',
-          onScore: function() { self.model.fetch(); }
-        });
+        self.ratingView = new S.RatingView({ model: rating });
+        $(self.ratingView.render().el).children().appendTo(self.el);
       });
 
       // Loop through the questions, creating a corresponding RatingModel for
@@ -94,7 +119,18 @@ var StreetScore = StreetScore || {};
       });
 
       return this;
+    },
+
+    events : {
+      'click .btn' : 'setScore'
+    },
+
+    setScore: function(e) {
+      var newScore = $(e.currentTarget).attr('data-score');
+      this.ratingView.setScore(newScore);
+      S.app.next();
     }
+
   });
 
   /**
@@ -104,8 +140,6 @@ var StreetScore = StreetScore || {};
   S.RatingView = Backbone.View.extend({
     initialize: function() {
       this.model.bind('change', this.render, this);
-
-      this.render();
     },
 
     render: function() {
@@ -113,20 +147,17 @@ var StreetScore = StreetScore || {};
           rating = this.model,
           html = template.render(rating.toJSON());
 
+      // Set the question text
+      $('#question span').text(this.model.get('question'));
+
       $(this.el).html(html);
       return this;
     },
 
-    events : {
-      'click .btn' : 'setScore'
-    },
-
-    setScore: function(e) {
-      var newScore = $(e.currentTarget).attr('data-score');
-      this.model.save({'score': newScore});
-
-      // if (this.options.onScore) { this.options.onScore(); }
+    setScore: function(score) {
+      this.model.save({'score': score});
     }
+
   });
 
   S.AppView = Backbone.View.extend({
@@ -134,18 +165,18 @@ var StreetScore = StreetScore || {};
 
     initialize: function() {
       this.model = new S.SurveySessionModel();
-      this.streetView1 = new StreetScore.StreetView({ model: this.model, index: 0, el: '#streetview-container1' });
-      this.streetView2 = new StreetScore.StreetView({ model: this.model, index: 1, el: '#streetview-container2' });
+      this.streetView1 = new StreetScore.StreetviewView({ model: this.model, index: 0, el: '#streetview-container1' });
+      this.streetView2 = new StreetScore.StreetviewView({ model: this.model, index: 1, el: '#streetview-container2' });
       this.ratingsView = new StreetScore.RatingsView({ model: this.model });
 
-      this.fetch();
+      this.next();
     },
 
     events: {
-      "click a#next-survey": "fetch"
+      "click a#next-survey": "next"
     },
 
-    fetch: function() {
+    next: function() {
       this.streetView1.stopRotation();
       this.streetView2.stopRotation();
       this.model.fetch();
@@ -153,4 +184,4 @@ var StreetScore = StreetScore || {};
   });
 })(StreetScore);
 
-var app = new StreetScore.AppView();
+StreetScore.app = new StreetScore.AppView();
