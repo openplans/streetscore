@@ -31,7 +31,7 @@ var StreetScore = StreetScore || {};
           view.pano.setPano(data.location.pano);
           view.pano.setVisible(true);
 
-          if(view.rotate) {
+          if(view.options.rotate) {
             // Rotate street view automatically by default
             view.rotate_id = setInterval(function(){
               view.pano.setPov({
