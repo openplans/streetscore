@@ -7,6 +7,7 @@ var StreetScore = StreetScore || {};
       this.sv = new google.maps.StreetViewService();
       this.pano =  new google.maps.StreetViewPanorama(this.el, {
         linksControl: false,
+        addressControl: false,
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.SMALL
         }
@@ -20,22 +21,34 @@ var StreetScore = StreetScore || {};
     render: function() {
       var block = this.model.get('blocks')[this.index],
           latLng = new google.maps.LatLng(block.point.lat, block.point.lon),
-          heading = 0,
+          heading,
           view = this;
 
-      this.sv.getPanoramaByLocation(latLng, 75, function(data, status){
+      this.sv.getPanoramaByLocation(latLng, 50, function(data, status){
+        heading = 0;
+
         if (status === google.maps.StreetViewStatus.OK) {
           view.pano.setPano(data.location.pano);
           view.pano.setVisible(true);
 
-          // Rotate street view automatically by default
-          view.rotate_id = setInterval(function(){
-            view.pano.setPov({
-              heading: heading+=0.5,
-              pitch: 5,
-              zoom: 1
-            });
-          }, 40);
+          if(view.rotate) {
+            // Rotate street view automatically by default
+            view.rotate_id = setInterval(function(){
+              view.pano.setPov({
+                heading: heading+=0.5,
+                pitch: 5,
+                zoom: 1
+              });
+            }, 40);
+          } else {
+              view.pano.setPov({heading: heading, pitch: 5, zoom: 1});
+          }
+
+        } else {
+          console.log('SV not found!');
+          // No results, fetch the next segment
+          view.stopRotation();
+          S.app.next();
         }
       });
     },
@@ -46,7 +59,9 @@ var StreetScore = StreetScore || {};
 
     stopRotation: function() {
       // Stop rotating street view on mousedown
-      clearInterval(this.rotate_id);
+      if (this.rotate_id) {
+        clearInterval(this.rotate_id);
+      }
     }
   });
 
