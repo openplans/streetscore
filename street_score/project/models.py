@@ -162,7 +162,7 @@ class SurveySession (object):
               about them first.
         """
         ten_least_rated_segments = (
-            Segment.objects.all()[:10]
+            Segment.objects.all().order_by('?')[:10]
         )
 
         segments = random.sample(ten_least_rated_segments, 2)
