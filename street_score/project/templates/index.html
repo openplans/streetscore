@@ -36,17 +36,23 @@
     </div>
 
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
-          <div class="well sidebar-nav">
-            <ul id="rating-list" class="nav nav-list"></ul>
-            <a href="#" id="next-survey" class="btn btn-primary btn-large">Next</a>
-          </div><!--/.well -->
-        </div><!--/span-->
-        <div class="span9">
+      <div class="row-fluid text-center">
+        <div class="span12 text-center"><h1 id="question">Which street is more <span>adjective</span>?</h1></div>
+      </div><!--/row-->
+      <div class="row-fluid main">
+        <div class="span6">
           <!-- Street View Goes Here -->
-          <div id="streetview-container"></div>
-        </div><!--/span-->
+          <div id="streetview-container1" class="streetview-container"></div>
+          </div>
+        <div class="span6">
+          <!-- Street View Goes Here -->
+          <div id="streetview-container2" class="streetview-container"></div>
+        </div>
+      </div><!--/row-->
+      <div class="row-fluid" id="ratings-container">
+      </div><!--/row-->
+      <div class="row-fluid">
+        <div class="span12 text-right"><a id="next-survey" href="#">Skip this one</a></div>
       </div><!--/row-->
 
       <hr>
@@ -59,12 +65,11 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
+    <!-- script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script -->
     <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/django.mustache.js"></script>
     <script src="{{ STATIC_URL }}underscore.js"></script>
     <script src="{{ STATIC_URL }}backbone.js"></script>
-    <script src="{{ STATIC_URL }}raty/jquery.raty.min.js"></script>
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
 

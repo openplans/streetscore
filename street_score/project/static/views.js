@@ -2,26 +2,26 @@ var StreetScore = StreetScore || {};
 
 (function(S) {
   S.StreetView = Backbone.View.extend({
-    el: 'body',
-
-    initialize: function() {
+    initialize: function(options) {
       // Init Google Street View
       this.sv = new google.maps.StreetViewService();
-      this.pano =  new google.maps.StreetViewPanorama(document.getElementById('streetview-container'), {
+      this.pano =  new google.maps.StreetViewPanorama(this.el, {
         linksControl: false,
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.SMALL
         }
       });
+      this.index = this.options.index;
 
       // Bind model change event
       this.model.bind('change', this.render, this);
     },
 
     render: function() {
-      var latLng = new google.maps.LatLng(this.model.get('point').lat, this.model.get('point').lon),
-        heading = 0,
-        view = this;
+      var block = this.model.get('blocks')[this.index],
+          latLng = new google.maps.LatLng(block.point.lat, block.point.lon),
+          heading = 0,
+          view = this;
 
       this.sv.getPanoramaByLocation(latLng, 50, function(data, status){
         if (status === google.maps.StreetViewStatus.OK) {
@@ -44,7 +44,7 @@ var StreetScore = StreetScore || {};
     },
 
     events : {
-      'mousedown #streetview-container' : 'stopRotation'
+      'mousedown' : 'stopRotation'
     },
 
     stopRotation: function() {
@@ -58,25 +58,24 @@ var StreetScore = StreetScore || {};
    */
   S.RatingsView = Backbone.View.extend({
     initialize: function() {
-      this.$container = $('ul#rating-list');
-
       // Bind model change event
       this.model.bind('change', this.render, this);
     },
 
     render: function() {
-      var questions = this.model.get('questions')
-        , ratings = new S.RatingCollection()
-        , listView = this;
-
-      // Empty the list before appending
-      listView.$container.empty();
+      var questions = [this.model.get('questions')[0]],
+          blocks = this.model.get('blocks'),
+          ratings = new S.RatingCollection(),
+          self = this;
 
       // As we add new ratings to the collection, we want new views to be
       // associated with them.
       ratings.bind('add', function(rating) {
-        var itemView = new S.RatingView({model: rating});
-        listView.$container.append(itemView.render().el);
+        var ratingView = new S.RatingView({
+          model: rating,
+          el: '#ratings-container',
+          onScore: function() { self.model.fetch(); }
+        });
       });
 
       // Loop through the questions, creating a corresponding RatingModel for
@@ -87,8 +86,10 @@ var StreetScore = StreetScore || {};
           'criterion': question.id,
           'question': question.prompt,
           'score': 0,
-          'segment': listView.model.get('segment_id'),
-          'block_index': listView.model.get('block_index')
+          'segment1': blocks[0].segment_id,
+          'block1_index': blocks[0].block_index,
+          'segment2': blocks[1].segment_id,
+          'block2_index': blocks[1].block_index
         });
       });
 
@@ -101,46 +102,40 @@ var StreetScore = StreetScore || {};
    * a RatingsView.
    */
   S.RatingView = Backbone.View.extend({
-    tagName: 'li',
-
     initialize: function() {
       this.model.bind('change', this.render, this);
+
+      this.render();
     },
 
     render: function() {
-      var template = Mustache.template('rating')
-        , rating = this.model
-        , html = template.render(rating.toJSON())
-        , view = this;
+      var template = Mustache.template('rating'),
+          rating = this.model,
+          html = template.render(rating.toJSON());
 
       $(this.el).html(html);
-
-      $('.star', this.el).raty({
-        // HACK: not ideal
-        path: '/static/raty',
-        hintList: ['bad', 'poor', 'average', 'good', 'great'],
-        start: rating.get('score') || 0
-      });
-
       return this;
     },
 
     events : {
-      'click .star' : 'setScore'
+      'click .btn' : 'setScore'
     },
 
-    setScore: function() {
-      var newScore = this.$('.star').raty('score');
+    setScore: function(e) {
+      var newScore = $(e.currentTarget).attr('data-score');
       this.model.save({'score': newScore});
+
+      // if (this.options.onScore) { this.options.onScore(); }
     }
   });
 
   S.AppView = Backbone.View.extend({
-    el: '.well',
+    el: 'body',
 
     initialize: function() {
       this.model = new S.SurveySessionModel();
-      this.streetView = new StreetScore.StreetView({ model: this.model });
+      this.streetView1 = new StreetScore.StreetView({ model: this.model, index: 0, el: '#streetview-container1' });
+      this.streetView2 = new StreetScore.StreetView({ model: this.model, index: 1, el: '#streetview-container2' });
       this.ratingsView = new StreetScore.RatingsView({ model: this.model });
 
       this.fetch();
@@ -151,7 +146,8 @@ var StreetScore = StreetScore || {};
     },
 
     fetch: function() {
-      this.streetView.stopRotation();
+      this.streetView1.stopRotation();
+      this.streetView2.stopRotation();
       this.model.fetch();
     }
   });

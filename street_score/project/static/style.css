@@ -1,26 +1,22 @@
-#streetview-container {
-  height:650px;
+.streetview-container {
+  height:600px;
+  border: 1px solid gray;
 }
 
-#rating-list {
-  margin:0;
+.main {
+  margin: 18px 0;
 }
 
-#rating-list li {
-  list-style:none;
-  margin:5px;
+#question {
+  text-align:center;
 }
 
-#rating-list li label {
-  float:none;
+.text-center {
+  text-align:center;
 }
 
-a#next-survey {
-  margin-top:15px;
-}
-
-.star {
-  float:right;
+.text-right {
+  text-align: right;
 }
 
 /* Override Bootstrap style to prevent issues with street view images */
