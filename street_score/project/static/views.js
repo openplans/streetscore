@@ -23,7 +23,7 @@ var StreetScore = StreetScore || {};
           heading = 0,
           view = this;
 
-      this.sv.getPanoramaByLocation(latLng, 50, function(data, status){
+      this.sv.getPanoramaByLocation(latLng, 75, function(data, status){
         if (status === google.maps.StreetViewStatus.OK) {
           view.pano.setPano(data.location.pano);
           view.pano.setVisible(true);
@@ -36,9 +36,6 @@ var StreetScore = StreetScore || {};
               zoom: 1
             });
           }, 40);
-        } else {
-          // No results, fetch the next segment
-          view.model.next();
         }
       });
     },
