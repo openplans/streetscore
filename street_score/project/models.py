@@ -161,11 +161,8 @@ class SurveySession (object):
         TODO: Order the blocks by those that have the least questions answered
               about them first.
         """
-        ten_least_rated_segments = (
-            Segment.objects.all().order_by('?')[:10]
-        )
+        segments = Segment.objects.all().order_by('?')[:2]
 
-        segments = random.sample(ten_least_rated_segments, 2)
         self.__blocks = [random.choice(segment.blocks) for segment in segments]
         return self.__blocks
 
@@ -179,3 +176,17 @@ class SurveySession (object):
         )
         self.__questions = all_questions
         return self.__questions
+
+    @classmethod
+    def make_surveys(cls, count=1):
+        segments = list(Segment.objects.all().order_by('?')[:(count * 2)])
+        questions = list(Criterion.objects.all())
+        surveys = []
+
+        for i in range(count):
+            block1 = random.choice(segments[2 * i].blocks)
+            block2 = random.choice(segments[2 * i + 1].blocks)
+
+            surveys.append(cls(blocks=[block1, block2], questions=questions))
+
+        return surveys

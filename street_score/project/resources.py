@@ -125,3 +125,10 @@ class SurveySessionView (views.View):
 
         survey_session = models.SurveySession(blocks=blocks)
         return SurveySessionResource().serialize_model(survey_session)
+
+
+class SurveySessionListView (views.View):
+    def get(self, request):
+        count = int(request.GET.get('count', 5))
+        return [SurveySessionResource().serialize_model(s)
+            for s in models.SurveySession.make_surveys(count)]
