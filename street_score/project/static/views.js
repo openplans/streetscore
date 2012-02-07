@@ -70,6 +70,7 @@ var StreetScore = StreetScore || {};
       console.log(newScore);
 
       this.model.save({'score': newScore});
+      $('.carousel').carousel('next');
     }
   });
 
