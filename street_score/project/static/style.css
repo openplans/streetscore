@@ -29,9 +29,10 @@ img {
   cursor: pointer;
   position: absolute;
   top: 50%;
-  right: 15px;
+  left: 50%;
   width: 40px;
   height: 40px;
+  margin-left: -20px;
   margin-top: -20px;
   font-size: 30px;
   line-height: 38px;
@@ -47,7 +48,9 @@ img {
 }
 .vote.right {
   left: auto;
-  left: 15px;
+  right: 50%;
+  margin-right: -20px;
+
 }
 .vote:hover {
   color: #ffffff;
