@@ -111,8 +111,7 @@ var StreetScore = StreetScore || {};
             $('.item:first', self.el).addClass('active');
           }
 
-          $('.carousel').carousel();
-          $('.carousel').carousel('pause');
+          $('.carousel').carousel({interval: 36000000});
         });
       });
     }
