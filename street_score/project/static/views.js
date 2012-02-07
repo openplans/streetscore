@@ -16,7 +16,7 @@ var StreetScore = StreetScore || {};
 
       S.sv.getPanoramaByLocation(latLng, 50, function(data, status) {
         if (status === google.maps.StreetViewStatus.OK) {
-          var url = 'http://maps.googleapis.com/maps/api/streetview?size=600x600&location='+
+          var url = 'http://maps.googleapis.com/maps/api/streetview?size=550x400&location='+
             self.options.point.lat+','+self.options.point.lon+'&heading=0&fov=90&pitch=5&sensor=false';
 
           $(self.el).attr('src', url);
@@ -31,10 +31,6 @@ var StreetScore = StreetScore || {};
 
   S.SurveyView = Backbone.View.extend({
     className: 'item',
-
-    initialize: function() {
-      console.log(this.model.toJSON());
-    },
 
     render: function(success, error) {
       var self = this,
@@ -70,7 +66,7 @@ var StreetScore = StreetScore || {};
       console.log(newScore);
 
       this.model.save({'score': newScore});
-      $('.carousel').carousel('next');
+      $(document).trigger('next');
     }
   });
 
@@ -78,8 +74,14 @@ var StreetScore = StreetScore || {};
     el: '#survey-container',
 
     initialize: function() {
-      this.model = new S.SurveySessionCollection();
-      this.model.bind('reset', this.render, this);
+      var self = this;
+      self.model = new S.SurveySessionCollection();
+      self.model.bind('reset', self.render, self);
+
+      $(document).on('next', function(){
+        $('.carousel').carousel('next');
+        self.model.fetch();
+      });
 
       this.model.fetch();
     },
@@ -112,7 +114,7 @@ var StreetScore = StreetScore || {};
             $('.item:first', self.el).addClass('active');
           }
 
-          $('.carousel').carousel({interval: 36000000});
+          $('.carousel').carousel({interval: 3600000});
         });
       });
     }
