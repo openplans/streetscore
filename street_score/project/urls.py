@@ -32,7 +32,7 @@ urlpatterns = patterns('',
         resources.SurveySessionView.as_view(),
         name='survey_session_instance'),
 
-    url(r'^survey_sessions$',
+    url(r'^survey_sessions/$',
         resources.SurveySessionListView.as_view(),
         name='survey_session_list'),
 

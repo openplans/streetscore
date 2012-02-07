@@ -35,26 +35,19 @@
       </div>
     </div>
 
-    <div class="container-fluid">
-      <div class="row-fluid text-center">
-        <div class="span12 text-center"><h1 id="question">Which street is more <span>...</span>?</h1></div>
-      </div><!--/row-->
-      <div class="row-fluid main">
-        <div class="span6">
-          <!-- Street View Goes Here -->
-          <div id="streetview-container1" class="streetview-container"></div>
-          </div>
-        <div class="span6">
-          <!-- Street View Goes Here -->
-          <div id="streetview-container2" class="streetview-container"></div>
-        </div>
-      </div><!--/row-->
-      <div class="row-fluid" id="ratings-container">
-      </div><!--/row-->
-      <div class="row-fluid">
-        <div class="span12 text-right"><a id="next-survey" href="#">Skip this one</a></div>
-      </div><!--/row-->
+    <div class="container">
+      <div class="row text-center">
+        <div class="span12 text-center"><h1 id="question">Which street is more walkable?</h1></div>
+      </div>
 
+      <div class="row">
+        <div class="span12">
+          <div id="survey-carousel" class="carousel slide">
+            <div id="survey-container" class="carousel-inner">
+            </div>
+          </div>
+        </div>
+      </div>
       <hr>
 
       <footer>
@@ -65,7 +58,7 @@
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <!-- script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script -->
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/django.mustache.js"></script>
     <script src="{{ STATIC_URL }}underscore.js"></script>
@@ -73,7 +66,7 @@
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
 
-    {% mustachejs "rating" %}
+    {% mustachejs "survey" %}
 
   </body>
 </html>
