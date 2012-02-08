@@ -35,13 +35,11 @@ var StreetScore = StreetScore || {};
             pitch: 5,
             zoom: 1
           });
-          self.pano.setVisible(true);
+          self.pano.setVisible(false);
 
           if (success) {
             // Tie this to the DOM
             success(self.el);
-            // Make sure the steet view refreshes
-            setTimeout(function() {self.show();}, 200);
           }
         } else {
           if (error) { error(); }
@@ -56,6 +54,9 @@ var StreetScore = StreetScore || {};
     show: function() {
       var self = this,
           heading = 0;
+
+      // Make the panorama visible
+      self.pano.setVisible(true);
 
       // http://stackoverflow.com/questions/6809573/google-street-view-problem-javascript
       google.maps.event.trigger(self.pano, 'resize');
@@ -118,6 +119,9 @@ var StreetScore = StreetScore || {};
       // When a survey is shown, so the SV views
       $(document).on('show', function(e) {
         if ($(self.el).is('.active')) {
+          // Remove previous surveys from the DOM
+          $(self.el).prevAll().remove();
+
           self.sv1.show();
           self.sv2.show();
         }
@@ -190,6 +194,9 @@ var StreetScore = StreetScore || {};
 
       // Fetch the first batch of surveys
       this.model.fetch();
+
+      // Init the carousel widget.
+      $('.carousel').carousel({interval: 3600000});
     },
 
     render: function() {
@@ -224,11 +231,9 @@ var StreetScore = StreetScore || {};
           // Make sure an item is active to make the carousel happy
           if ($('.item', self.el).hasClass('active') === false) {
             $('.item:first', self.el).addClass('active');
+            // First time, make sure show is triggered
+            $(document).triggerHandler('show');
           }
-
-          // Init the carousel widget.
-          // TODO: Might be able to move this out of here.
-          $('.carousel').carousel({interval: 3600000});
         });
       });
     }
