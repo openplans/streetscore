@@ -130,8 +130,8 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this;
-      self.sv1 = new S.StreetImageView({point: this.options.point1, rotate: true});
-      self.sv2 = new S.StreetImageView({point: this.options.point2, rotate: true});
+      self.sv1 = new S.StreetviewView({point: this.options.point1, rotate: true});
+      self.sv2 = new S.StreetviewView({point: this.options.point2, rotate: true});
 
       // Attempt to render street view 1, success or
       self.sv1.render(function(el1){
