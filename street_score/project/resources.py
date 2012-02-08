@@ -129,6 +129,6 @@ class SurveySessionView (views.View):
 
 class SurveySessionListView (views.View):
     def get(self, request):
-        count = int(request.GET.get('count', 2))
+        count = int(request.GET.get('count', 3))
         return [SurveySessionResource().serialize_model(s)
             for s in models.SurveySession.make_surveys(count)]
