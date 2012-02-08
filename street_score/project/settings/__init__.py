@@ -194,6 +194,9 @@ INSTALLED_APPS = (
 # static/media directories are dotcloud specific at the moment.
 COMPRESS_ENABLED = (os.environ.get('STREETSCORE_COMPRESS_ENABLED', env.get('STREETSCORE_COMPRESS_ENABLED', 'False')) == 'True')
 
+# Override the default JS minifier
+COMPRESS_JS_FILTERS = ['compressor.filters.jsmin.SlimItFilter']
+
 SOUTH_TESTS_MIGRATE = False
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
