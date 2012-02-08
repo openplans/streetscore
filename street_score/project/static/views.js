@@ -37,10 +37,7 @@ var StreetScore = StreetScore || {};
           });
           self.pano.setVisible(false);
 
-          if (success) {
-            // Tie this to the DOM
-            success(self.el);
-          }
+          if (success) {success(self.el);}
         } else {
           if (error) { error(); }
         }
@@ -118,6 +115,9 @@ var StreetScore = StreetScore || {};
 
       // When a survey is shown, so the SV views
       $(document).on('show', function(e) {
+        self.sv1.stopRotation();
+        self.sv2.stopRotation();
+
         if ($(self.el).is('.active')) {
           // Remove previous surveys from the DOM
           $(self.el).prevAll().remove();
