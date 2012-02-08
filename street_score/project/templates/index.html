@@ -1,4 +1,5 @@
 {% load mustachejs %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -60,7 +61,6 @@
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 
-    {% load compress %}
     {% compress js %}
     <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>

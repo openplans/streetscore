@@ -190,6 +190,10 @@ INSTALLED_APPS = (
     'project',
 )
 
+# Only enable compression via an environment variable since the
+# static/media directories are dotcloud specific at the moment.
+COMPRESS_ENABLED = (os.environ.get('STREETSCORE_COMPRESS_ENABLED', env.get('STREETSCORE_COMPRESS_ENABLED', 'False')) == 'True')
+
 SOUTH_TESTS_MIGRATE = False
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
