@@ -56,8 +56,12 @@
 
     </div><!--/.fluid-container-->
 
+
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    {% load compress %}
+    {% compress js %}
     <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/mustache-0.4.0-dev.js"></script>
     <script src="{{ STATIC_URL }}mustache/js/django.mustache.js"></script>
@@ -65,8 +69,8 @@
     <script src="{{ STATIC_URL }}backbone.js"></script>
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
+    {% endcompress %}
 
     {% mustachejs "survey" %}
-
   </body>
 </html>
