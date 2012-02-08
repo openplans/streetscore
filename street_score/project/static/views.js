@@ -80,6 +80,7 @@ var StreetScore = StreetScore || {};
   // Static street view images
   S.StreetImageView = Backbone.View.extend({
     tagName: 'img',
+    className: 'streetview',
 
     render: function(success, error) {
       var self = this,
@@ -88,11 +89,6 @@ var StreetScore = StreetScore || {};
       // Check for street view imagery, 50m radius
       S.sv.getPanoramaByLocation(latLng, 50, function(data, status) {
         if (status === google.maps.StreetViewStatus.OK) {
-          var url = 'http://maps.googleapis.com/maps/api/streetview?size=550x550&location='+
-            self.options.point.lat+','+self.options.point.lon+'&heading=0&fov=90&pitch=5&sensor=false';
-
-          $(self.el).attr('src', url);
-
           if (success) { success(self.el); }
         } else {
           if (error) { error(); }
@@ -101,7 +97,11 @@ var StreetScore = StreetScore || {};
     },
 
     show: function(){
-      // Only render the image here? Could save on requests.
+      var self = this,
+          url = 'http://maps.googleapis.com/maps/api/streetview?size=550x550&location='+
+          self.options.point.lat+','+self.options.point.lon+'&heading=0&fov=90&pitch=5&sensor=false';
+
+      $(self.el).attr('src', url);
     }
   });
 
@@ -115,8 +115,8 @@ var StreetScore = StreetScore || {};
 
       // When a survey is shown, so the SV views
       $(document).on('show', function(e) {
-        self.sv1.stopRotation();
-        self.sv2.stopRotation();
+        if (self.sv1.stopRotation) {self.sv1.stopRotation();}
+        if (self.sv2.stopRotation) {self.sv2.stopRotation();}
 
         if ($(self.el).is('.active')) {
           // Remove previous surveys from the DOM
@@ -130,8 +130,8 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this;
-      self.sv1 = new S.StreetviewView({point: this.options.point1, rotate: true});
-      self.sv2 = new S.StreetviewView({point: this.options.point2, rotate: true});
+      self.sv1 = new S.StreetImageView({point: this.options.point1, rotate: true});
+      self.sv2 = new S.StreetImageView({point: this.options.point2, rotate: true});
 
       // Attempt to render street view 1, success or
       self.sv1.render(function(el1){
