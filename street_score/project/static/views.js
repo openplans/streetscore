@@ -170,7 +170,9 @@ var StreetScore = StreetScore || {};
     el: '#survey-container',
 
     initialize: function() {
-      var self = this;
+      var self = this,
+          QUEUE_SIZE = 4;
+
       self.model = new S.SurveySessionCollection();
 
       // Render thyself when the surveys show up
@@ -180,9 +182,13 @@ var StreetScore = StreetScore || {};
       // and fetch more surveys from the server.
       $(document).on('next', function(){
         $('.carousel').carousel('next');
-        self.model.fetch();
 
-        // TODO: Remove the last survey from the DOM?
+        // Only fetch surveys the total number of surveys we need
+        var surveysToFetch = QUEUE_SIZE - $('.item:not(.active)').length;
+        // console.log('fetching ' + surveysToFetch + ' surveys.');
+        if (surveysToFetch) {
+          self.model.fetch({ data: {count:surveysToFetch} });
+        }
       });
 
       // Trigger a more generica 'show' event when the carousel
@@ -193,7 +199,7 @@ var StreetScore = StreetScore || {};
       });
 
       // Fetch the first batch of surveys
-      this.model.fetch();
+      this.model.fetch({ data: {count:QUEUE_SIZE} });
 
       // Init the carousel widget.
       $('.carousel').carousel({interval: 3600000});
