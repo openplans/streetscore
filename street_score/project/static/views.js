@@ -130,8 +130,8 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this;
-      self.sv1 = new S.StreetviewView({point: this.options.point1, rotate: true});
-      self.sv2 = new S.StreetviewView({point: this.options.point2, rotate: true});
+      self.sv1 = new S.StreetviewView({point: this.options.point1, rotate: false});
+      self.sv2 = new S.StreetviewView({point: this.options.point2, rotate: false});
 
       // Attempt to render street view 1, success or
       self.sv1.render(function(el1){
@@ -238,7 +238,7 @@ var StreetScore = StreetScore || {};
           if ($('.item', self.el).hasClass('active') === false) {
             $('.item:first', self.el).addClass('active');
             // First time, make sure show is triggered
-            $(document).triggerHandler('show');
+            setTimeout(function(){$(document).triggerHandler('show');},200);
           }
         });
       });
