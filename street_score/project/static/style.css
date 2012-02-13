@@ -23,6 +23,11 @@
   display: none;
 }
 
+.navbar .nav.social {
+  float:right;
+  padding:10px 0;
+}
+
 /* Override Bootstrap style to prevent issues with street view images */
 img {
   max-width: none;
