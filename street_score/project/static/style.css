@@ -19,6 +19,10 @@
   overflow: hidden;
 }
 
+#about {
+  display: none;
+}
+
 /* Override Bootstrap style to prevent issues with street view images */
 img {
   max-width: none;

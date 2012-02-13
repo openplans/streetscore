@@ -32,7 +32,12 @@
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="brand" href="#">Street Score</a>
-        </div>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a data-toggle="modal" href="#about">About</a></li>
+            </ul>
+          </div>
+         </div>
       </div>
     </div>
 
@@ -54,6 +59,21 @@
       <footer>
         <p>&copy; OpenPlans 2012</p>
       </footer>
+
+      <!-- About Page Modal -->
+      <div id="about" class="modal">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>About Beautiful Street</h3>
+        </div>
+        <div class="modal-body">
+          <p>One fine body…</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" data-dismiss="modal">Close</a>
+        </div>
+      </div>
+
     </div>
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
