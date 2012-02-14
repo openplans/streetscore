@@ -34,7 +34,7 @@ class Rating (TimeStampedModel):
         uniquely identify a Block. Not including a related_name until needed. Tricky.
         """
 
-    score = models.PositiveIntegerField()
+    score = models.IntegerField()
     """ The rating score.
         """
 
