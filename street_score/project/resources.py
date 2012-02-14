@@ -1,5 +1,6 @@
 from djangorestframework import mixins
 from djangorestframework import parsers
+from djangorestframework import renderers
 from djangorestframework import resources
 from djangorestframework import views
 from . import models
@@ -46,11 +47,12 @@ class RatingInstanceView (views.InstanceModelView):
     parsers = [parser for parser in parsers.DEFAULT_PARSERS
                if parser is not parsers.JSONParser]
     parsers.insert(0, RatingJSONParser)
-
+    renderers = [renderers.JSONRenderer]
     resource = RatingResource
 
 
 class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
+    renderers = [renderers.JSONRenderer]
     resource = RatingResource
 
     @property
@@ -77,6 +79,7 @@ class BlockRatingResource (RatingResource):
 
 
 class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
+    renderers = [renderers.JSONRenderer]
     resource = BlockRatingResource
 
     @property
@@ -114,6 +117,8 @@ class SurveySessionResource (resources.Resource):
 
 
 class SurveySessionView (views.View):
+    renderers = [renderers.JSONRenderer]
+
     def get(self, request):
         # block_index = request.GET.get('block_index')
         # segment_id = request.GET.get('segment')
@@ -128,6 +133,8 @@ class SurveySessionView (views.View):
 
 
 class SurveySessionListView (views.View):
+    renderers = [renderers.JSONRenderer]
+
     def get(self, request):
         count = int(request.GET.get('count', 5))
         return [SurveySessionResource().serialize_model(s)
