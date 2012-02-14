@@ -204,7 +204,7 @@ var StreetScore = StreetScore || {};
       });
 
       // Fetch the first batch of surveys
-      this.model.fetch({ data: {count:QUEUE_SIZE} });
+      self.model.fetch({ data: {count:QUEUE_SIZE} });
 
       // Init the carousel widget.
       $('.carousel').carousel({interval: 3600000});

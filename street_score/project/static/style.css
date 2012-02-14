@@ -21,7 +21,7 @@
 
 .navbar .nav.social {
   float:right;
-  padding:10px 0;
+  padding-top:10px;
 }
 
 /* Override Bootstrap style to prevent issues with street view images */

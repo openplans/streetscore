@@ -39,9 +39,14 @@
             </ul>
             <ul class="nav social">
               <li>
-                <span class='st_facebook'></span>
-                <span class='st_twitter'></span>
-                <span class='st_plusone'></span>
+                <!-- AddThis Button BEGIN -->
+                <div class="addthis_toolbox addthis_default_style ">
+                <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+                <a class="addthis_button_tweet"></a>
+                <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+                </div>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f397f2e190b60e6"></script>
+                <!-- AddThis Button END -->
               </li>
             </ul>
           </div>
@@ -102,9 +107,6 @@
     <script src="{{ STATIC_URL }}models.js"></script>
     <script src="{{ STATIC_URL }}views.js"></script>
     {% endcompress %}
-
-    <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-    <script type="text/javascript">stLight.options({publisher: "ur-1c5dddde-3893-4ede-55bd-881510bf780"}); </script>
 
     <script type="text/javascript">
 
