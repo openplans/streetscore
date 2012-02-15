@@ -39,8 +39,17 @@ class Rating (TimeStampedModel):
         """
 
     def __unicode__(self):
-        return 'Rating of Segment #{0}, block #{1} for "{2}"'.format(
-            self.segment.id, self.block_index, self.criterion.prompt)
+        meaning = ({
+            -1: 'more {0} than',
+            1:  'less {0} than',
+            0:  'as {0} as',
+        })
+
+        return ('Segment #{s1}, block #{b1} is {rating}'
+                ' segment #{s2}, block #{b2}').format(
+                s1=self.segment1.id, b1=self.block1_index,
+                s2=self.segment2.id, b2=self.block2_index,
+                rating=meaning[self.score].format(self.criterion.prompt))
 
     @property
     def block(self):
