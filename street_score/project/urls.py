@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, include, url
-from django.views import generic as views
-from . import resources
+from django.views.generic import TemplateView
+from . import resources, views
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib.gis import admin
@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$',
-        views.TemplateView.as_view(template_name='index.html'),
+        TemplateView.as_view(template_name='index.html'),
         name='home'),
 
     url(r'^ratings/$',
@@ -39,4 +39,8 @@ urlpatterns = patterns('',
     url(r'^block_ratings/$',
         resources.BlockRatingListView.as_view(),
         name='block_rating_list'),
+
+    url(r'^data/?$',
+        views.csv_data,
+        name='data_csv_list'),
 )
