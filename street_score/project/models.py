@@ -22,20 +22,17 @@ class Rating (TimeStampedModel):
     """ The criterion that this rating is for.
         """
 
-    segment1 = models.ForeignKey('Segment', related_name='+')
-    block1_index = models.PositiveIntegerField()
-    """ The first block that this rating compares. A segment and a block_index together
-        uniquely identify a Block. Not including a related_name until needed. Tricky.
+    place1 = models.ForeignKey('Place', related_name='+')
+    """ The first place that this rating compares
         """
 
-    segment2 = models.ForeignKey('Segment', related_name='+')
-    block2_index = models.PositiveIntegerField()
-    """ The second block that this rating compares. A segment and a block_index together
-        uniquely identify a Block. Not including a related_name until needed. Tricky.
+    place2 = models.ForeignKey('Place', related_name='+')
+    """ The second place that this rating compares
         """
 
     score = models.IntegerField()
-    """ The rating score.
+    """ The rating score.  1 means that place1 "wins" over place2 for the given
+        criterion.  -1 means that place2 "wins".
         """
 
     def __unicode__(self):
