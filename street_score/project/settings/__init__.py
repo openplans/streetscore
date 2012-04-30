@@ -185,6 +185,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'django_nose',
     'compressor',
+    'bulkadmin',
 
     # Project-specific apps
     'project',
