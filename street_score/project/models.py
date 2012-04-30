@@ -111,6 +111,14 @@ class Segment (models.Model):
         return BlockSet(self)
 
 
+class Place (models.Model):
+    lat = models.FloatField()
+    lon = models.FloatField()
+
+    def __unicode__(self):
+        return '({0}, {1})'.format(self.lat, self.lon)
+
+
 class Block (object):
     MAX_LENGTH = 200.0
 
