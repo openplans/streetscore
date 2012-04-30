@@ -1,8 +1,5 @@
 # Django trunk
-git+git://github.com/django/django.git#egg=Django
-
-# Django stable
-# django
+Django==1.4
 
 # Bootstrap theme and such
 django-bootstrapped
