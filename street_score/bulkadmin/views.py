@@ -2,6 +2,9 @@
 from django.views import generic as views
 from project.models import Place
 
+import logging
+log = logging.getLogger(__name__)
+
 
 class BulkUploadFormAdminView (views.FormView):
     template_name = "bulkadmin/bulk_add_form.html"

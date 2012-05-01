@@ -31,8 +31,5 @@ class BulkUploadAdmin (admin.ModelAdmin):
         return urlpatterns
 
     def bulk_add_view(self, request, form_url='', extra_context=None):
-
-        log.debug("yes")
-
         view = views.BulkUploadFormAdminView.as_view(form_class=forms.BulkUploadForm)
         return view(request)

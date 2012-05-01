@@ -53,7 +53,7 @@ class BulkUploadTest(TestCase):
 
         with open(csvname) as csvfile:
             res = client.post('/admin/project/place/bulk_add',
-                {'data': csvfile})
+                {'data': csvfile},
+                follow=True)
 
-            # assert_equal(res.status_code, 302)
             assert_equal(Place.objects.count(), 25)
