@@ -36,7 +36,7 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     },
     'project_db': {
-        'ENGINE':   'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE':   'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME':     os.environ.get('STREETSCORE_DB_NAME', env.get('STREETSCORE_DB_NAME', 'streetscore')),                      # Or path to database file if using sqlite3.
         'USER':     os.environ.get('STREETSCORE_DB_USER', env.get('STREETSCORE_DB_USER', 'postgres')),                      # Not used with sqlite3.
         'PASSWORD': os.environ.get('STREETSCORE_DB_PASS', env.get('STREETSCORE_DB_PASS', 'postgres')),                  # Not used with sqlite3.
@@ -170,7 +170,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
+    #'django.contrib.gis',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:

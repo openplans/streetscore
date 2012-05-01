@@ -1,7 +1,6 @@
 import math
 import random
-from django.contrib.gis.db import models
-from django.contrib.gis.geos import GEOSGeometry
+from django.db import models
 
 
 class TimeStampedModel (models.Model):
