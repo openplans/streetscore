@@ -1,6 +1,5 @@
 import csv
 import datetime
-from django.contrib.gis.geos import GEOSGeometry
 from django.db import connections
 from django.http import HttpResponse
 
