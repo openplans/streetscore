@@ -195,7 +195,7 @@ var StreetScore = StreetScore || {};
         // Only fetch surveys the total number of surveys we need
         var surveysToFetch = QUEUE_SIZE - $('.item:not(.active)').length;
         // console.log('fetching ' + surveysToFetch + ' surveys.');
-        if (surveysToFetch) {
+        if (surveysToFetch > 0) {
           self.model.fetch({ data: {count:surveysToFetch} });
         }
       });
