@@ -131,6 +131,6 @@ class SurveySession (object):
             place1 = places[2 * i]
             place2 = places[2 * i + 1]
 
-            surveys.append(cls(blocks=[place1, place2], questions=questions))
+            surveys.append(cls(places=[place1, place2], questions=questions))
 
         return surveys

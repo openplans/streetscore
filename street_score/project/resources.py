@@ -11,6 +11,7 @@ from . import models
 #
 
 class RatingResource (resources.ModelResource):
+    # TODO FIX ME
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime']
     include = ['question']
@@ -57,36 +58,8 @@ class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
 
     @property
     def queryset(self):
+        # TODO FIX ME
         return models.Rating.objects.order_by('segment', 'block_index').select_related()
-
-
-class BlockRatingResource (RatingResource):
-    model = models.Rating
-    exclude = ['created_datetime', 'updated_datetime', 'score', 'segment__id']
-    include = ['segment', 'question', 'point', 'score__avg']
-
-    def segment(self, rating):
-        return rating['segment__id']
-
-    def point(self, rating):
-        segment = models.Segment.objects.get(id=rating['segment__id'])
-        block = models.Block(segment, rating['block_index'])
-        p = block.characteristic_point
-        return {'lat': p.y, 'lon': p.x}
-
-    def question(self, rating):
-        return rating['criterion__prompt']
-
-
-class BlockRatingListView (mixins.PaginatorMixin, views.ListModelView):
-    renderers = [renderers.JSONRenderer]
-    resource = BlockRatingResource
-
-    @property
-    def queryset(self):
-        from django.db.models import Avg
-        return models.Rating.objects.values('segment__id', 'block_index', 'criterion__prompt').annotate(Avg('score')).select_related()
-
 
 ##
 # The definition of a survey session resource, and its view.
@@ -96,40 +69,14 @@ class SurveySessionResource (resources.Resource):
 
     fields = (
         'questions',
-        'blocks'
+        'places'
     )
 
     def questions(self, session):
         return session.questions
 
-    def blocks(self, session):
-        blocks_data = []
-        for block in session.blocks:
-            p = block.characteristic_point
-            block_data = {
-                'segment_id': block.segment.id,
-                'block_index': block.index,
-                'point': {'lat': p.y, 'lon': p.x}
-            }
-            blocks_data.append(block_data)
-
-        return blocks_data
-
-
-class SurveySessionView (views.View):
-    renderers = [renderers.JSONRenderer]
-
-    def get(self, request):
-        # block_index = request.GET.get('block_index')
-        # segment_id = request.GET.get('segment')
-
-        blocks = None
-        # if segment_id is not None and block_index is not None:
-        #     segment = models.Segment.objects.get(segment_id)
-        #     block = models.Block(segment, int(block_index))
-
-        survey_session = models.SurveySession(blocks=blocks)
-        return SurveySessionResource().serialize_model(survey_session)
+    def places(self, session):
+        return session.places
 
 
 class SurveySessionListView (views.View):

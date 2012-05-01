@@ -24,21 +24,14 @@ urlpatterns = patterns('',
     url(r'^ratings/$',
         resources.RatingListView.as_view(),
         name='rating_list'),
+
     url(r'^ratings/(?P<id>\d+)$',
         resources.RatingInstanceView.as_view(),
         name='rating_instance'),
 
-    url(r'^survey_session$',
-        resources.SurveySessionView.as_view(),
-        name='survey_session_instance'),
-
     url(r'^survey_sessions/$',
         resources.SurveySessionListView.as_view(),
         name='survey_session_list'),
-
-    url(r'^block_ratings/$',
-        resources.BlockRatingListView.as_view(),
-        name='block_rating_list'),
 
     url(r'^data/?$',
         views.csv_data,
