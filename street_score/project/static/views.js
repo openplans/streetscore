@@ -23,7 +23,7 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this,
-          latLng = new google.maps.LatLng(self.options.point.lat, self.options.point.lon);
+          latLng = new google.maps.LatLng(self.options.place.lat, self.options.place.lon);
 
       // Check for street view imagery, 50m radius
       S.sv.getPanoramaByLocation(latLng, 50, function(data, status) {
@@ -84,7 +84,7 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this,
-          latLng = new google.maps.LatLng(self.options.point.lat, self.options.point.lon);
+          latLng = new google.maps.LatLng(self.options.place.lat, self.options.place.lon);
 
       // Check for street view imagery, 50m radius
       S.sv.getPanoramaByLocation(latLng, 50, function(data, status) {
@@ -99,7 +99,7 @@ var StreetScore = StreetScore || {};
     show: function(){
       var self = this,
           url = 'http://maps.googleapis.com/maps/api/streetview?size=550x550&location='+
-          self.options.point.lat+','+self.options.point.lon+'&heading=0&fov=90&pitch=5&sensor=false';
+          self.options.place.lat+','+self.options.place.lon+'&heading=0&fov=90&pitch=5&sensor=false';
 
       $(self.el).attr('src', url);
     }
@@ -130,8 +130,8 @@ var StreetScore = StreetScore || {};
 
     render: function(success, error) {
       var self = this;
-      self.sv1 = new S.StreetviewView({point: this.options.point1, rotate: false});
-      self.sv2 = new S.StreetviewView({point: this.options.point2, rotate: false});
+      self.sv1 = new S.StreetviewView({place: this.model.get('place1'), rotate: false});
+      self.sv2 = new S.StreetviewView({place: this.model.get('place2'), rotate: false});
 
       // Attempt to render street view 1, success or
       self.sv1.render(function(el1){
@@ -191,7 +191,7 @@ var StreetScore = StreetScore || {};
         }
       });
 
-      // Trigger a more generica 'show' event when the carousel
+      // Trigger a more generic 'show' event when the carousel
       // advances to the next survey. The surveys sometimes need
       // to do something.
       $(document).on('slid', '.carousel', function(){
@@ -206,7 +206,7 @@ var StreetScore = StreetScore || {};
       // Fetch the first batch of surveys
       self.model.fetch({ data: {count:QUEUE_SIZE} });
 
-      // Init the carousel widget.
+      // Init the carousel widget with a very large autoslide interval.
       $('.carousel').carousel({interval: 3600000});
     },
 
@@ -217,26 +217,22 @@ var StreetScore = StreetScore || {};
       // rate each street view.
       this.model.each(function(surveyModel) {
         var question = surveyModel.get('questions')[0],
-            blocks = surveyModel.get('blocks'),
+            places = surveyModel.get('places'),
             ratingModel = new S.RatingModel({
               'criterion': question.id,
               'question': question.prompt,
               'score': 0,
-              'segment1': blocks[0].segment_id,
-              'block1_index': blocks[0].block_index,
-              'segment2': blocks[1].segment_id,
-              'block2_index': blocks[1].block_index
+              'place1': places[0],
+              'place2': places[1]
             }),
             // Make the survey, not yet rendered
             view = new S.SurveyView( {
-              model: ratingModel,
-              point1: surveyModel.get('blocks')[0].point,
-              point2: surveyModel.get('blocks')[1].point
+              model: ratingModel
             });
 
         // Render the survey view...
         view.render(function(el) {
-          // ...then append it to the DOM on the callback
+          // ...then append it to the DOM if streetview exists for both places
           $(self.el).append(el);
 
           // Make sure an item is active to make the carousel happy
