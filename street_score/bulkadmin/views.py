@@ -2,6 +2,7 @@
 from django.core.urlresolvers import reverse
 from django.contrib.admin.util import get_deleted_objects, model_ngettext
 from django.views import generic as views
+from django.utils.encoding import force_unicode
 from django.utils.translation import ugettext_lazy, ugettext as _
 from project.models import Place
 
@@ -25,6 +26,13 @@ class BulkUploadFormAdminView (views.FormView):
             )
 
         return super(BulkUploadFormAdminView, self).form_valid(form)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(BulkUploadFormAdminView, self).get_context_data(*args, **kwargs)
+
+        opts = self.model_admin.model._meta
+        context['title'] = u"Add many {0} from a CSV file".format(force_unicode(opts.verbose_name_plural))
+        return context
 
     def get_success_url(self):
         return '/admin/project/place/'
