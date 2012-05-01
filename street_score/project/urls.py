@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from . import resources, views
 
 # Uncomment the next two lines to enable the admin:
-from django.contrib.gis import admin
+from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
