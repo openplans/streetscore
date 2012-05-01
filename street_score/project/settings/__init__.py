@@ -32,7 +32,7 @@ except IOError:
             'STREETSCORE_DB_USER': url.username,
             'STREETSCORE_DB_PASS': url.password,
             'STREETSCORE_DB_HOST': url.hostname,
-            'STREETSCORE_DB_PORT': url.port,
+            'STREETSCORE_DB_PORT': url.port or 5432,
         }
     else:
         env = {}
