@@ -28,14 +28,6 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'streetscore.db',                      # Or path to database file if using sqlite3.
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    },
-    'project_db': {
         'ENGINE':   'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME':     os.environ.get('STREETSCORE_DB_NAME', env.get('STREETSCORE_DB_NAME', 'streetscore')),                      # Or path to database file if using sqlite3.
         'USER':     os.environ.get('STREETSCORE_DB_USER', env.get('STREETSCORE_DB_USER', 'postgres')),                      # Not used with sqlite3.
@@ -46,27 +38,6 @@ DATABASES = {
 }
 if local:
     DATABASES.update(local.DATABASES)
-
-class ProjectRouter(object):
-    """
-    A router to send all database traffic to the project_db.  We do this to
-    avoid having to use the database that Heroku automatically assigns.
-
-    """
-
-    def db_for_read(self, model, **hints):
-        return 'project_db'
-
-    def db_for_write(self, model, **hints):
-        return 'project_db'
-
-    def allow_relation(self, obj1, obj2, **hints):
-        return 'project_db'
-
-    def allow_syncdb(self, db, model):
-        return True
-
-DATABASE_ROUTERS = [ProjectRouter()]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

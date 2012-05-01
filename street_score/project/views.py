@@ -65,7 +65,7 @@ def csv_data(request):
     response['Content-Disposition'] = 'attachment; filename=beautifulst_data_%s.csv' % (now.strftime('%Y%m%d%H%M%S'), )
 
     # Get the data
-    cursor = connections['project_db'].cursor()
+    cursor = connections['default'].cursor()
     cursor.execute(DATA_DUMP_QUERY)
 
     data = cursor.fetchall()
