@@ -160,6 +160,15 @@ var StreetScore = StreetScore || {};
     vote: function(e) {
       // Record a score and go the next survey
       var newScore = $(e.currentTarget).attr('data-score');
+
+      // We only need the id/foreign key when saving. No need to
+      // trigger the change event in this case even though it's
+      // not bound.
+      this.model.set({
+        'place1': this.model.get('place1').id,
+        'place2': this.model.get('place2').id
+      }, {'silent': true});
+
       this.model.save({'score': newScore});
       $(document).trigger('next');
     }
