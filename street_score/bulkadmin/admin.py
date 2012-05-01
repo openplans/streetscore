@@ -9,6 +9,8 @@ log = logging.getLogger(__name__)
 
 
 class BulkUploadAdmin (admin.ModelAdmin):
+    change_list_template = 'bulkadmin/change_list.html'
+
     def __init__(self, *args, **kwargs):
         super(BulkUploadAdmin, self).__init__(*args, **kwargs)
 
@@ -32,4 +34,4 @@ class BulkUploadAdmin (admin.ModelAdmin):
 
     def bulk_add_view(self, request, form_url='', extra_context=None):
         view = views.BulkUploadFormAdminView.as_view(form_class=forms.BulkUploadForm)
-        return view(request)
+        return view(request, model_admin=self)
