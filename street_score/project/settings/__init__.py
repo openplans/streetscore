@@ -1,3 +1,5 @@
+import os
+
 try:
     import local
 except ImportError:
@@ -5,12 +7,36 @@ except ImportError:
 
 try:
     import json
-    with open('/home/dotcloud/environment.json') as f:
-        env = json.load(f)
-except IOError:
-    env = {}
 
-import os
+    # If on DotCloud...
+    with open('/home/dotcloud/environment.json') as f:
+        # Load the dotcloud environment file into memory.
+        env = json.load(f)
+
+except IOError:
+
+    # If on Heroku...
+    if 'DATABASE_URL' in os.environ:
+        import sys
+        import urlparse
+
+        # Register database schemes in URLs.
+        urlparse.uses_netloc.append('postgres')
+        urlparse.uses_netloc.append('mysql')
+
+        url = urlparse.urlparse(os.environ['DATABASE_URL'])
+
+        # Update with environment configuration.
+        env = {
+            'STREETSCORE_DB_NAME': url.path[1:],
+            'STREETSCORE_DB_USER': url.username,
+            'STREETSCORE_DB_PASS': url.password,
+            'STREETSCORE_DB_HOST': url.hostname,
+            'STREETSCORE_DB_PORT': url.port,
+        }
+    else:
+        env = {}
+
 def abs_dir(sub_path):
     this_dir = os.path.dirname(__file__)
     return os.path.join(this_dir, '..', sub_path)
