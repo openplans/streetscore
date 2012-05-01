@@ -3,6 +3,8 @@ import datetime
 from django.db import connections
 from django.http import HttpResponse
 
+from .models import Rating
+
 def csv_data(request):
     now = datetime.datetime.utcnow()
 
@@ -11,7 +13,7 @@ def csv_data(request):
     response['Content-Disposition'] = 'attachment; filename=beautifulst_data_%s.csv' % (now.strftime('%Y%m%d%H%M%S'), )
 
     # Get the data
-    ratings = Ratings.objects.all().select_related()
+    ratings = Rating.objects.all().select_related()
 
     # Init the csv writer
     writer = csv.writer(response)
