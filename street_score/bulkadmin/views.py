@@ -1,5 +1,6 @@
 # Create your views here.
 from django.core.urlresolvers import reverse
+from django.contrib.admin.helpers import AdminForm
 from django.contrib.admin.util import get_deleted_objects, model_ngettext
 from django.views import generic as views
 from django.utils.encoding import force_unicode
@@ -30,8 +31,15 @@ class BulkUploadFormAdminView (views.FormView):
     def get_context_data(self, *args, **kwargs):
         context = super(BulkUploadFormAdminView, self).get_context_data(*args, **kwargs)
 
+        form = context['form']
+        fields = form.base_fields.keys()
+        fieldsets = [(None, {'fields': fields})]
+        bulkadminform = AdminForm(form, fieldsets, {}, model_admin=self)
         opts = self.model_admin.model._meta
-        context['title'] = u"Add many {0} from a CSV file".format(force_unicode(opts.verbose_name_plural))
+        context.update({
+            'title': u"Add many {0} from a CSV file".format(force_unicode(opts.verbose_name_plural)),
+            'adminform': bulkadminform,
+        })
         return context
 
     def get_success_url(self):
