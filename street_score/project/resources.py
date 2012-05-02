@@ -6,21 +6,23 @@ from djangorestframework import views
 from . import models
 
 
+class UserInfoResource (resources.ModelResource):
+    model = models.UserInfo
+    exclude = ['created_datetime', 'updated_datetime', 'session']
+
+
+class UserInfoInstanceView (views.InstanceModelView):
+    resource = UserInfoResource
+
+
 ##
 # The definition of a rating resource, and its corresponding views.
 #
 
 class RatingResource (resources.ModelResource):
-    # TODO FIX ME
     model = models.Rating
     exclude = ['created_datetime', 'updated_datetime']
     include = ['question']
-
-    def criterion(self, rating):
-        return rating.criterion.id
-
-    def segment(self, rating):
-        return rating.segment.id
 
 
 class RatingJSONParser (parsers.JSONParser):
@@ -36,7 +38,7 @@ class RatingJSONParser (parsers.JSONParser):
         # the entire sync method).  I may have to extend the Backbone.Model
         # class to be a little smarter.
 
-        ignore = [u'id', u'url', u'question', u'point']
+        ignore = [u'id', u'url', u'question']
         for key in ignore:
             if key in parsed_data:
                 del parsed_data[key]
@@ -45,9 +47,11 @@ class RatingJSONParser (parsers.JSONParser):
 
 
 class RatingInstanceView (views.InstanceModelView):
+    # Use the RatingJSONParser instead of the default JSONParser.
     parsers = [parser for parser in parsers.DEFAULT_PARSERS
                if parser is not parsers.JSONParser]
     parsers.insert(0, RatingJSONParser)
+
     renderers = [renderers.JSONRenderer]
     resource = RatingResource
 
@@ -56,10 +60,6 @@ class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
     renderers = [renderers.JSONRenderer]
     resource = RatingResource
 
-    @property
-    def queryset(self):
-        # TODO FIX ME
-        return models.Rating.objects.order_by('segment', 'block_index').select_related()
 
 ##
 # The definition of a survey session resource, and its view.

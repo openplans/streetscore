@@ -18,7 +18,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$',
-        TemplateView.as_view(template_name='index.html'),
+        views.MainUIView.as_view(),
         name='home'),
 
     url(r'^ratings/$',
@@ -28,6 +28,10 @@ urlpatterns = patterns('',
     url(r'^ratings/(?P<id>\d+)$',
         resources.RatingInstanceView.as_view(),
         name='rating_instance'),
+
+    url(r'^user_info/(?P<id>\d+)$',
+        resources.UserInfoInstanceView.as_view(),
+        name='user_info_instance'),
 
     url(r'^survey_sessions/$',
         resources.SurveySessionListView.as_view(),

@@ -34,6 +34,11 @@ class Rating (TimeStampedModel):
         criterion.  -1 means that place2 "wins".
         """
 
+    user_info = models.ForeignKey('UserInfo', null=True, related_name='ratings')
+    """ The information for the user that made this rating.  Not required, but
+        useful for data analysis.
+        """
+
     def __unicode__(self):
         meaning = ({
             -1: 'more {0} than',
@@ -71,6 +76,27 @@ class Place (models.Model):
 
     def __unicode__(self):
         return '({0}, {1})'.format(self.lat, self.lon)
+
+
+class UserInfo (TimeStampedModel):
+    lat = models.FloatField(null=True)
+    lon = models.FloatField(null=True)
+    """ The user's location.
+        """
+
+    SOURCES = (
+        ('ip', 'IP Address'),
+        ('html5', 'HTML5 Geolocation API'),
+    )
+    location_source = models.CharField(max_length=32, choices=SOURCES)
+    location_data = models.CharField(max_length=2048)
+    """ The method by which the location was obtained, and any additional
+        information required to recreate the location.
+        """
+
+    session = models.OneToOneField('sessions.Session')
+    """ The Django browser session.
+        """
 
 
 class SurveySession (object):

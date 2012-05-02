@@ -109,6 +109,16 @@
     <script src="{{ STATIC_URL }}views.js"></script>
     {% endcompress %}
 
+    <script>
+      $(document).ready(function() {
+        var appOptions = {
+          userInfoId: {{ user_info.id }},
+          initialVoteCount: {{ initial_vote_count }}
+        };
+        StreetScore.app = new StreetScore.AppView(appOptions);
+      });
+    </script>
+
     <script type="text/javascript">
 
       var _gaq = _gaq || [];

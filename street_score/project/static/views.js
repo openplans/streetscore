@@ -174,6 +174,16 @@ var StreetScore = StreetScore || {};
     }
   });
 
+  // TODO: Build this out
+  S.UserInfoView = Backbone.View.extend({
+    el: '#user-bar',
+
+    initialize: function() {
+      var self = this;
+      self.model.bind('change', self.render, self);
+    }
+  });
+
   // The view for the app, of course
   S.AppView = Backbone.View.extend({
     el: '#survey-container',
@@ -232,7 +242,8 @@ var StreetScore = StreetScore || {};
               'question': question.prompt,
               'score': 0,
               'place1': places[0],
-              'place2': places[1]
+              'place2': places[1],
+              'user_info': self.options.userInfoId
             }),
             // Make the survey, not yet rendered
             view = new S.SurveyView( {
@@ -255,7 +266,3 @@ var StreetScore = StreetScore || {};
     }
   });
 })(StreetScore);
-
-$(document).ready(function() {
-  StreetScore.app = new StreetScore.AppView();
-});
