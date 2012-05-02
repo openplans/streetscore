@@ -4,7 +4,11 @@ from django import forms
 
 
 class BulkUploadForm(forms.Form):
-    data = forms.FileField()
+    data = forms.FileField(help_text="""
+        <p>Select the CSV file to upload.  The file should have a header for
+           each column you want to populate.  When you have selected your
+           file, click the 'Upload' button below.</p>
+        """)
 
     def clean(self):
         cleaned_data = super(BulkUploadForm, self).clean()
