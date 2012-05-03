@@ -19,6 +19,25 @@
   display: none;
 }
 
+.navbar.mainnav {
+  margin-bottom:0;
+}
+
+.navbar .navbar-inner {
+  border-radius:0;
+  -webkit-border-radius:0;
+  -moz-border-radius:0;
+}
+
+.navbar.subnav .navbar-inner {
+  background-color:#eee;
+  background-image:none;
+}
+
+.navbar.subnav #vote-counter {
+  float:right;
+}
+
 .navbar .nav.social {
   float:right;
   padding-top:10px;

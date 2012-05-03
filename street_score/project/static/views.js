@@ -170,7 +170,7 @@ var StreetScore = StreetScore || {};
       }, {'silent': true});
 
       this.model.save({'score': newScore});
-      $(document).trigger('next');
+      $(S).trigger('vote');
     }
   });
 
@@ -181,6 +181,27 @@ var StreetScore = StreetScore || {};
     initialize: function() {
       var self = this;
       self.model.bind('change', self.render, self);
+    }
+  });
+
+  S.VoteCounter = Backbone.View.extend({
+    el: '#vote-count',
+
+    voteCount: 0,
+
+    initialize: function(){
+      var self = this;
+
+      $(S).bind('vote', function(){
+        self.options.voteCount++;
+        self.render();
+      });
+
+      self.render();
+    },
+
+    render: function(){
+      $(this.el).html(this.options.voteCount);
     }
   });
 
@@ -199,7 +220,7 @@ var StreetScore = StreetScore || {};
 
       // Tells the carousel to advance ot the next survey
       // and fetch more surveys from the server.
-      $(document).on('next', function(){
+      $(S).on('next', function(){
         $('.carousel').carousel('next');
 
         // Only fetch surveys the total number of surveys we need
@@ -217,9 +238,14 @@ var StreetScore = StreetScore || {};
         $(document).triggerHandler('show');
       });
 
+      // Listen for a vote event
+      $(S).bind('vote', function(){
+        $(S).trigger('next');
+      });
+
       // Skip the current survey on link click
       $(document).on('click', '#skip', function() {
-        $(document).trigger('next');
+        $(S).trigger('next');
       });
 
       // Fetch the first batch of surveys
@@ -227,6 +253,11 @@ var StreetScore = StreetScore || {};
 
       // Init the carousel widget with a very large autoslide interval.
       $('.carousel').carousel({interval: 3600000});
+
+
+      var voteCounterView = new S.VoteCounter({
+        voteCount: self.options.initialVoteCount
+      });
     },
 
     render: function() {
@@ -246,12 +277,12 @@ var StreetScore = StreetScore || {};
               'user_info': self.options.userInfoId
             }),
             // Make the survey, not yet rendered
-            view = new S.SurveyView( {
+            surveyView = new S.SurveyView( {
               model: ratingModel
             });
 
         // Render the survey view...
-        view.render(function(el) {
+        surveyView.render(function(el) {
           // ...then append it to the DOM if streetview exists for both places
           $(self.el).append(el);
 
