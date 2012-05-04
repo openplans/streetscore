@@ -42,9 +42,13 @@ class MainUIView (views.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(MainUIView, self).get_context_data(**kwargs)
 
+        session_key = self.request.session.session_key
+        if not self.request.session.exists(session_key):
+            self.request.session.create()
+            session_key = self.request.session.session_key
+
         # Using the browser session, get the current user info (or create it if
         # none exists for the current session).
-        session_key = self.request.session.session_key
         session = Session.objects.get(session_key=session_key)
         user_info = UserInfo.objects.get_or_create(session=session)[0]
 
