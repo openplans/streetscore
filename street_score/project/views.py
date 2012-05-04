@@ -7,7 +7,7 @@ from django.db import connections
 from django.http import HttpResponse
 from django.views import generic as views
 
-from .models import Rating, UserInfo, SiteConfiguration
+from .models import Criterion, Rating, UserInfo, SiteConfiguration
 
 log = logging.getLogger(__name__)
 
@@ -52,6 +52,7 @@ class MainUIView (views.TemplateView):
         # none exists for the current session).
         session = Session.objects.get(session_key=session_key)
         user_info = UserInfo.objects.get_or_create(session=session)[0]
+        criteria = Criterion.objects.all()
         site = Site.objects.get_current()
 
         try:
@@ -63,6 +64,7 @@ class MainUIView (views.TemplateView):
             'user_info': user_info,
             'initial_vote_count': user_info.ratings.count(),
             'site': site,
-            'site_config': site_config
+            'site_config': site_config,
+            'criteria': criteria
         })
         return context
