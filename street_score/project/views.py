@@ -54,10 +54,15 @@ class MainUIView (views.TemplateView):
         user_info = UserInfo.objects.get_or_create(session=session)[0]
         site = Site.objects.get_current()
 
+        try:
+            site_config = SiteConfiguration.objects.get(site=site)
+        except SiteConfiguration.DoesNotExist:
+            site_config = None
+
         context.update({
             'user_info': user_info,
             'initial_vote_count': user_info.ratings.count(),
             'site': site,
-            'site_config': SiteConfiguration.objects.get(site=site)
+            'site_config': site_config
         })
         return context
