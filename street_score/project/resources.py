@@ -6,6 +6,12 @@ from djangorestframework import views
 from . import models
 
 
+class UncachedMixin (object):
+    def final(self, request, response, *args, **kwargs):
+        response.headers['Expires'] = -1
+        return super(UncachedMixin, self).final(request, response, *args, **kwargs)
+
+
 class UserInfoResource (resources.ModelResource):
     model = models.UserInfo
     exclude = ['created_datetime', 'updated_datetime', 'session']
@@ -32,7 +38,7 @@ class UserInfoJSONParser (parsers.JSONParser):
         return parsed_data, parsed_files
 
 
-class UserInfoInstanceView (views.InstanceModelView):
+class UserInfoInstanceView (UncachedMixin, views.InstanceModelView):
     # Use the UserInfoJSONParser instead of the default JSONParser.
     parsers = [parser for parser in parsers.DEFAULT_PARSERS
                if parser is not parsers.JSONParser]
@@ -73,7 +79,7 @@ class RatingJSONParser (parsers.JSONParser):
         return parsed_data, parsed_files
 
 
-class RatingInstanceView (views.InstanceModelView):
+class RatingInstanceView (UncachedMixin, views.InstanceModelView):
     # Use the RatingJSONParser instead of the default JSONParser.
     parsers = [parser for parser in parsers.DEFAULT_PARSERS
                if parser is not parsers.JSONParser]
@@ -83,7 +89,7 @@ class RatingInstanceView (views.InstanceModelView):
     resource = RatingResource
 
 
-class RatingListView (mixins.PaginatorMixin, views.ListOrCreateModelView):
+class RatingListView (UncachedMixin, mixins.PaginatorMixin, views.ListOrCreateModelView):
     renderers = [renderers.JSONRenderer]
     resource = RatingResource
 
@@ -106,7 +112,7 @@ class SurveySessionResource (resources.Resource):
         return session.places
 
 
-class SurveySessionListView (views.View):
+class SurveySessionListView (UncachedMixin, views.View):
     renderers = [renderers.JSONRenderer]
 
     def get(self, request):
