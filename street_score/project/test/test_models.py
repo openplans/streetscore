@@ -1,7 +1,7 @@
 from django.test import TestCase
 from nose.tools import *
 
-from ..models import Criterion, Rating, Place
+from ..models import Criterion, Rating, Place, SurveySession
 
 class RatingModelTest (TestCase):
 
@@ -10,6 +10,7 @@ class RatingModelTest (TestCase):
 
         Place.objects.all().delete()
         Rating.objects.all().delete()
+        Criterion.objects.all().delete()
 
     def test_unicode_conversion (self):
         """Make sure that the unicode conversion of a rating runs."""
@@ -25,3 +26,15 @@ class RatingModelTest (TestCase):
 
         rating3 = Rating.objects.create(criterion=criterion, place1=place1, place2=place2, score=0)
         assert_equal(unicode(rating3), 'Place #(1, 2) is as robust as place #(3, 4)')
+
+    def test_never_return_duplicate_surveys (self):
+        # This won't really test never, just not likely.
+        Criterion.objects.create(prompt='x')
+        for i in range(20):
+            Place.objects.create(lat=i, lon=i)
+
+        # Try 10 times to get pairs with no duplicates.
+        for _ in range(10):
+            surveys = SurveySession.make_surveys(10)
+            for survey in surveys:
+                assert_not_equal(survey.places[0], survey.places[1])
