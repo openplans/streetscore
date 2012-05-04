@@ -58,9 +58,12 @@
     <div class="navbar subnav">
       <div class="navbar-inner">
         <div class="container">
-          <div id="locate"></div>
+          <div id="locate">
+            <div class="locate-btn-container"></div>
+            <a data-toggle="modal" href="#why-locate">why?</a>
+          </div>
           <div id="vote-counter">
-            <span id="vote-count">0</span> Votes!
+            <h2><span class="vote-count">0</span> Votes</h2>
           </div>
         </div>
       </div>
@@ -105,6 +108,20 @@
         </div>
       </div>
 
+      <!-- Why Locate Modal -->
+      <div id="why-locate" class="modal">
+        <div class="modal-header">
+          <a class="close" data-dismiss="modal">×</a>
+          <h3>Why?</h3>
+        </div>
+        <div class="modal-body">
+          <p>Why do you want to locate me?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="#" data-dismiss="modal">close</a>
+          <div class="locate-btn-container"></div>
+        </div>
+      </div>
     </div>
 
     <script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -124,6 +141,9 @@
       $(document).ready(function() {
         var appOptions = {
           userInfoId: {{ user_info.id }},
+          userInfoLat: {{ user_info.lat|default_if_none:"null" }},
+          userInfoLon: {{ user_info.lon|default_if_none:"null" }},
+          userInfoSessionKey: '{{ user_info.session.session_key }}',
           initialVoteCount: {{ initial_vote_count }}
         };
         StreetScore.app = new StreetScore.AppView(appOptions);
@@ -144,5 +164,6 @@
 
     </script>
     {% mustachejs "survey" %}
+    {% mustachejs "locate" %}
   </body>
 </html>

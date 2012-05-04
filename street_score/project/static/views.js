@@ -174,24 +174,91 @@ var StreetScore = StreetScore || {};
     }
   });
 
-  // TODO: Build this out
-  S.UserInfoView = Backbone.View.extend({
-    el: '#user-bar',
+  // UI stuff associated with locating a user
+  S.LocateView = Backbone.View.extend({
+    // Didn't use .locate-btn-container b/c BackBone only gave us back the
+    // first element, and we wanted all of them. Using body for event context.
+    el: 'body',
 
     initialize: function() {
       var self = this;
+
       self.model.bind('change', self.render, self);
+
+      self.render();
+    },
+
+    render: function() {
+      var self = this,
+          template = Mustache.template('locate'),
+          title = 'Save my Location';
+
+      // Set the button title depending on whether a location exists or not
+      if (self.model.get('lat') && self.model.get('lon')) {
+        title = 'Update my Location';
+      }
+
+      // Render the buttons (now on the subnav and modal)
+      $('.locate-btn-container').html(template.render({'title': title}));
+    },
+
+    events : {
+      'click .locate-btn-container' : 'locate'
+    },
+
+    locate: function(){
+      var self = this,
+          $btn = $(self.el).find('.locate-btn');
+
+      // Set loading status using 'data-loading-text' attribute
+      $btn.button('loading');
+
+      // Get the location
+      navigator.geolocation.getCurrentPosition(function(position){
+
+        // Save the location to the model
+        self.model.save({
+          'lat': position.coords.latitude,
+          'lon': position.coords.longitude,
+          'location_source': 'html5',
+          'location_data': position
+        });
+
+        // Reset the buttons status
+        $btn.button('reset');
+
+        // Show the success message
+        self.showMessage('Location saved. Thanks!', 'success');
+      }, function(err){
+        $btn.button('reset');
+        // Didn't work. Show a helpful error.
+        self.showMessage('Eeek. That didn\'t work. Please check your browser settings.', 'error');
+      });
+    },
+
+    // Helper to show a status message
+    showMessage: function(msg, status){
+
+      $('<div class="locate-alert alert alert-'+(status || 'info')+'">' + msg + '</div>')
+        .appendTo(this.el) // Append to the body
+        .slideDown(300, function() {
+          var self = this;
+          setTimeout(function() { $(self).slideUp(); }, 3000);
+        });
     }
   });
 
+  // UI stuff for showing vote counts
   S.VoteCounter = Backbone.View.extend({
-    el: '#vote-count',
+    el: '.vote-count',
 
     voteCount: 0,
 
     initialize: function(){
       var self = this;
 
+      // Increment and update on vote. This is calculated so there's no need
+      // to save it to the database.
       $(S).bind('vote', function(){
         self.options.voteCount++;
         self.render();
@@ -257,6 +324,15 @@ var StreetScore = StreetScore || {};
 
       var voteCounterView = new S.VoteCounter({
         voteCount: self.options.initialVoteCount
+      });
+
+      var locateView = new S.LocateView({
+        'model': new S.UserInfoModel({
+          'id': self.options.userInfoId,
+          'lat': self.options.userInfoLat,
+          'lon': self.options.userInfoLon,
+          'session': self.options.userInfoSessionKey
+        })
       });
     },
 

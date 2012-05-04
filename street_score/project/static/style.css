@@ -15,7 +15,7 @@
   overflow: hidden;
 }
 
-#about {
+.modal {
   display: none;
 }
 
@@ -29,18 +29,51 @@
   -moz-border-radius:0;
 }
 
-.navbar.subnav .navbar-inner {
+.subnav .navbar-inner {
   background-color:#eee;
   background-image:none;
 }
 
-.navbar.subnav #vote-counter {
+.subnav #vote-counter {
   float:right;
+}
+
+.subnav #locate {
+  float:left;
+}
+
+.subnav #locate a {
+  vertical-align: bottom;
 }
 
 .navbar .nav.social {
   float:right;
   padding-top:10px;
+}
+
+#why-locate.modal .modal-footer {
+  text-align:right;
+}
+
+.locate-btn-container {
+  display: inline-block;
+}
+
+.subnav .locate-btn-container .locate-btn {
+  margin:5px 0;
+}
+
+.locate-alert {
+  text-align:center;
+  border-radius:0;
+  -webkit-border-radius:0;
+  -moz-border-radius:0;
+  display: none;
+
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
 }
 
 /* Override Bootstrap style to prevent issues with street view images */

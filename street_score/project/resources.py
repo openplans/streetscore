@@ -11,7 +11,34 @@ class UserInfoResource (resources.ModelResource):
     exclude = ['created_datetime', 'updated_datetime', 'session']
 
 
+class UserInfoJSONParser (parsers.JSONParser):
+    def parse(self, stream):
+        parsed_data, parsed_files = super(UserInfoJSONParser, self).parse(stream)
+
+        # Backbone.js likes to send up all the data in a model, whether you want
+        # it to or not.  This means that we get attributes that we don't want,
+        # like `id` and `url`.  Here, we're ignoring those attributes.
+        #
+        # I don't like this as a solution; I feel like I should be able to
+        # clean my data on the client before saving (without having to override
+        # the entire sync method).  I may have to extend the Backbone.Model
+        # class to be a little smarter.
+
+        ignore = [u'id', u'url']
+        for key in ignore:
+            if key in parsed_data:
+                del parsed_data[key]
+
+        return parsed_data, parsed_files
+
+
 class UserInfoInstanceView (views.InstanceModelView):
+    # Use the UserInfoJSONParser instead of the default JSONParser.
+    parsers = [parser for parser in parsers.DEFAULT_PARSERS
+               if parser is not parsers.JSONParser]
+    parsers.insert(0, UserInfoJSONParser)
+
+    renderers = [renderers.JSONRenderer]
     resource = UserInfoResource
 
 

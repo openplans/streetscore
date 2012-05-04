@@ -10,4 +10,8 @@ var StreetScore = StreetScore || {};
   S.RatingModel = Backbone.Model.extend({
     urlRoot: '/ratings/'
   });
+
+  S.UserInfoModel = Backbone.Model.extend({
+    urlRoot: '/user_info/'
+  });
 })(StreetScore);
