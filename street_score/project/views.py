@@ -2,11 +2,12 @@ import csv
 import datetime
 import logging
 from django.contrib.sessions.models import Session
+from django.contrib.sites.models import Site
 from django.db import connections
 from django.http import HttpResponse
 from django.views import generic as views
 
-from .models import Rating, UserInfo
+from .models import Rating, UserInfo, SiteConfiguration
 
 log = logging.getLogger(__name__)
 
@@ -51,9 +52,12 @@ class MainUIView (views.TemplateView):
         # none exists for the current session).
         session = Session.objects.get(session_key=session_key)
         user_info = UserInfo.objects.get_or_create(session=session)[0]
+        site = Site.objects.get_current()
 
         context.update({
             'user_info': user_info,
-            'initial_vote_count': user_info.ratings.count()
+            'initial_vote_count': user_info.ratings.count(),
+            'site': site,
+            'site_config': SiteConfiguration.objects.get(site=site)
         })
         return context

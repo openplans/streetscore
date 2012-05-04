@@ -99,6 +99,20 @@ class UserInfo (TimeStampedModel):
         """
 
 
+class SiteConfiguration (models.Model):
+    site = models.OneToOneField('sites.Site', related_name='config')
+    google_analytics_key = models.CharField(max_length=256, null=True, blank=True)
+    addthis_key = models.CharField(max_length=256, null=True, blank=True)
+    addthis_title = models.CharField(max_length=256, null=True, blank=True)
+
+    about_title = models.CharField(max_length=256, null=True, blank=True)
+    about_text = models.TextField(null=True, blank=True)
+
+    def __unicode__(self):
+        return 'Configuration for {0}'.format(self.site.name)
+
+
+
 class SurveySession (object):
     """
 

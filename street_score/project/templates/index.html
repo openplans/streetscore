@@ -5,7 +5,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Beautiful Streets</title>
+    <title>{{ site.name }}</title>
     <meta name="description" content="A experimental way of collecting qualitative street data.">
     <meta name="author" content="OpenPlans">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,24 +32,26 @@
     <div class="navbar mainnav">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#">Beautiful Streets</a>
+          <a class="brand" href="#">{{ site.name }}</a>
           <div class="nav-collapse">
             <ul class="nav">
               <li><a data-toggle="modal" href="#about">About</a></li>
               <li><a href="data">Download the Data</a></li>
             </ul>
+            {% if site_config.addthis_key %}
             <ul class="nav social">
               <li>
                 <!-- AddThis Button BEGIN -->
-                <div class="addthis_toolbox addthis_default_style" addthis:url="http://www.beautiful.st" addthis:title="Show some love to Beautiful Streets, an OpenPlans experiment to measure the beauty of Philly streets.">
+                <div class="addthis_toolbox addthis_default_style" addthis:url="{{ site.domain }}" addthis:title="{{ site_config.addthis_title }}">
                 <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
                 <a class="addthis_button_tweet"></a>
                 <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
                 </div>
-                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f397f2e190b60e6"></script>
+                <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid={{ site_config.addthis_key }}"></script>
                 <!-- AddThis Button END -->
               </li>
             </ul>
+            {% endif %}
           </div>
          </div>
       </div>
@@ -95,13 +97,22 @@
       <div id="about" class="modal">
         <div class="modal-header">
           <a class="close" data-dismiss="modal">×</a>
-          <h3>About Beautiful Streets</h3>
+          <h3>
+            {% if site_config.about_title %}
+              {{ site_config.about_title }}
+            {% else %}
+              About {{ site.name }}
+            {% endif %}
+          </h3>
         </div>
         <div class="modal-body">
-          <p>What makes a beautiful street, or a pleasant neighborhood? Maybe that’s hard to define, but can you tell a beautiful place from somewhere that’s not so hot?</p>
-          <p><a href="http://www.beautiful.st/">Beautiful Streets</a> is a project from <a href="http://openplans.org/civicworks">OpenPlans</a>. It’s an experiment: we’re trying out a different way to evaluate places, called pairwise surveys, as popularized by the fantastic <a href="http://allourideas.org">All Our Ideas</a>. We’re also testing out some neat interface ideas, and learning about the use of <a href="http://maps.google.com/intl/en/help/maps/streetview/">Street View</a> in evaluating places for urban planning projects.</p>
-          <p>With your help, we’ll compare 200 randomly selected streets in Philadelphia and ask which one in each pair is more beautiful.  We expect this experiment will produce some neat data, which you’ll be able to download here soon.</p>
-          <p>Try it out, and let us know what you think (<a href="http://twitter.com/openplans">@OpenPlans</a> or <a href="http://openplans.org/contact-us/">here</a>). You can find the source on <a href="http://github.com/openplans/streetscore">GitHub</a>, and some ideas about next steps in our <a href="https://www.pivotaltracker.com/projects/477459">public issue tracker</a>.</p>
+          {% if site_config.about_text %}
+            {{ site_config.about_text }}
+          {% else %}
+            <p>What makes a beautiful street, or a pleasant neighborhood? Maybe that’s hard to define, but can you tell a beautiful place from somewhere that’s not so hot?</p>
+            <p><a href="{{ site.domain }}">{{ site.name }}</a> is a project from <a href="http://openplans.org/civicworks">OpenPlans</a>. It’s an experiment: we’re trying out a different way to evaluate places, called pairwise surveys, as popularized by the fantastic <a href="http://allourideas.org">All Our Ideas</a>. We’re also testing out some neat interface ideas, and learning about the use of <a href="http://maps.google.com/intl/en/help/maps/streetview/">Street View</a> in evaluating places for urban planning projects.</p>
+            <p>Try it out, and let us know what you think (<a href="http://twitter.com/openplans">@OpenPlans</a> or <a href="http://openplans.org/contact-us/">here</a>). You can find the source on <a href="http://github.com/openplans/streetscore">GitHub</a>, and some ideas about next steps in our <a href="https://www.pivotaltracker.com/projects/477459">public issue tracker</a>.</p>
+          {% endif %}
         </div>
         <div class="modal-footer">
           <a href="#" class="btn" data-dismiss="modal">Close</a>
@@ -155,10 +166,11 @@
       });
     </script>
 
+    {% if site_config.google_analytics_key %}
     <script type="text/javascript">
 
       var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-8102379-18']);
+      _gaq.push(['_setAccount', '{{ site_config.google_analytics_key }}']);
       _gaq.push(['_trackPageview']);
 
       (function() {
@@ -168,6 +180,7 @@
       })();
 
     </script>
+    {% endif %}
     {% mustachejs "survey" %}
     {% mustachejs "locate" %}
   </body>
