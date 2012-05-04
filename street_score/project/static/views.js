@@ -7,6 +7,8 @@ var StreetScore = StreetScore || {};
   S.StreetviewView = Backbone.View.extend({
     className: 'streetview',
 
+    dragging: false,
+
     initialize: function() {
       var self = this,
           heading = 0;
@@ -18,6 +20,17 @@ var StreetScore = StreetScore || {};
         zoomControlOptions: {
           style: google.maps.ZoomControlStyle.SMALL
         }
+      });
+
+      // Simulate dragging for streetview. Assumes we're chaning the POV
+      // if the mouse goes down in the container.
+      $(self.el).bind('mousedown', function(evt){
+        self.options.dragging = true;
+      });
+
+      // If the mouse goes up anywhere, anytime then no streetview is dragging.
+      $(window).bind('mouseup', function(evt){
+        self.options.dragging = false;
       });
     },
 
@@ -66,6 +79,22 @@ var StreetScore = StreetScore || {};
             zoom: 1
           });
         }, 40);
+      } else {
+        // Listen for povchanged events from other street views. Don't do anything
+        // if the event you just got is from yourself. That's weird, man.
+        $(S).bind('povchanged', function(evt, id, pov) {
+          if (!self.options.dragging) {
+            self.pano.setPov(pov);
+          }
+        });
+
+        // Trigger povchanged events when this changes. Don't trigger unless I'm
+        // the streetview doing the dragging.
+        google.maps.event.addListener(self.pano, 'pov_changed', function() {
+          if (self.options.dragging) {
+            $(S).trigger('povchanged', [self.pano.getPano(), self.pano.pov]);
+          }
+        });
       }
     },
 
