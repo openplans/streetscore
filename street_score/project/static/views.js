@@ -343,8 +343,9 @@ var StreetScore = StreetScore || {};
       });
 
       // Skip the current survey on link click
-      $(document).on('click', '#skip', function() {
+      $(document).on('click', '#skip', function(evt) {
         $(S).trigger('next');
+        evt.preventDefault();
       });
 
       // Fetch the first batch of surveys
