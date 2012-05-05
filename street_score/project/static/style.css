@@ -1,5 +1,5 @@
 .streetview {
-  height:550px;
+  height:450px;
 }
 
 .text-center {
@@ -40,6 +40,7 @@
 
 .subnav #locate {
   float:left;
+  margin-bottom:5px;
 }
 
 .subnav #locate a {
@@ -57,10 +58,6 @@
 
 .locate-btn-container {
   display: inline-block;
-}
-
-.subnav .locate-btn-container .locate-btn {
-  margin:5px 0;
 }
 
 .locate-alert {
@@ -114,4 +111,30 @@ img {
   text-decoration: none;
   opacity: 0.9;
   filter: alpha(opacity=90);
+}
+
+@media (max-width: 767px) {
+  .streetview {
+    height:250px;
+    margin-bottom:20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar.subnav {
+    margin-bottom:5px;
+  }
+
+  .streetview {
+    height:150px;
+    margin-bottom:10px;
+  }
+
+  .subnav #locate a {
+    display:none;
+  }
+
+  #question {
+    font-size:18px;
+  }
 }

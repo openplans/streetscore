@@ -200,6 +200,9 @@ var StreetScore = StreetScore || {};
 
       this.model.save({'score': newScore});
       $(S).trigger('vote');
+
+      // Keep the hash from scrolling to the top
+      e.preventDefault();
     }
   });
 
