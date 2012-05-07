@@ -1,5 +1,19 @@
 import os
 
+# Make sure you set the following configuration environment variables:
+#
+#   STREETSCORE_COMPRESS_ENABLED ('True', or 'False')
+#
+#   DATABASE_URL
+#     - or -
+#   STREETSCORE_DB_NAME
+#   STREETSCORE_DB_USER
+#   STREETSCORE_DB_PASS
+#   STREETSCORE_DB_HOST
+#   STREETSCORE_DB_PORT
+#
+
+
 try:
     import local
 except ImportError:
