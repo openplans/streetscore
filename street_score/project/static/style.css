@@ -15,7 +15,7 @@
   overflow: hidden;
 }
 
-.vote-counter h2 {
+#vote-counter h2 {
   color: white;
 }
 
