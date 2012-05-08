@@ -175,6 +175,12 @@ img {
   padding: 20px 10px 20px;
 }
 
+#attribution-logos img {
+/*  border: 1px solid black;*/
+  height: 3em;
+  margin-right: 20px;
+}
+
 /* Option #2 */
 
 /*.mainnav .navbar-inner {*/
