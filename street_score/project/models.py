@@ -34,7 +34,7 @@ class Rating (TimeStampedModel):
         criterion.  -1 means that place2 "wins".
         """
 
-    user_info = models.ForeignKey('UserInfo', null=True, related_name='ratings')
+    user_info = models.ForeignKey('sessions.UserInfo', null=True, related_name='ratings')
     """ The information for the user that made this rating.  Not required, but
         useful for data analysis.
         """
@@ -98,6 +98,14 @@ class UserInfo (TimeStampedModel):
     """ The Django browser session.
         """
 
+    def __unicode__(self):
+        return u'User for session {key}'.format(key=self.session.session_key)
+
+    class Meta:
+        app_label = 'sessions'
+        db_table = 'project_userinfo'
+        verbose_name_plural = 'User info'
+
 
 class SiteConfiguration (models.Model):
     site = models.OneToOneField('sites.Site', related_name='config')
@@ -111,6 +119,9 @@ class SiteConfiguration (models.Model):
     def __unicode__(self):
         return 'Configuration for {0}'.format(self.site.name)
 
+    class Meta:
+        app_label = 'sites'
+        db_table = 'project_siteconfiguration'
 
 
 class SurveySession (object):
