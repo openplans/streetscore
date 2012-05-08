@@ -25,14 +25,15 @@ def csv_data(request):
     writer = csv.writer(response)
 
     # Write the header row
-    writer.writerow(['lat1','lon1','lat2','lon2','score'])
+    writer.writerow(['lat1','lon1','lat2','lon2','score','user_lat', 'user_lon'])
 
     # Write the contents
     for rating in ratings:
         writer.writerow([
             rating.place1.lat, rating.place1.lon,
             rating.place2.lat, rating.place2.lon,
-            rating.score])
+            rating.score,
+            rating.user_info.lat, rating.user_info.lon])
 
     return response
 
