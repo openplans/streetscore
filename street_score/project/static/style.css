@@ -147,7 +147,15 @@ img {
 }
 
 .mainnav .brand {
+  color: white;
+}
+
+a {
   color: #eeaf20;
+}
+
+a:hover {
+  color: #df9926
 }
 
 .subnav .navbar-inner {
