@@ -33,7 +33,10 @@ def csv_data(request):
             rating.place1.lat, rating.place1.lon,
             rating.place2.lat, rating.place2.lon,
             rating.score,
-            rating.user_info.lat, rating.user_info.lon])
+            # Inlcude the lat/lon, iff there is user_info for the rating.  If
+            # not, just use None.
+            rating.user_info and rating.user_info.lat,
+            rating.user_info and rating.user_info.lon])
 
     return response
 
