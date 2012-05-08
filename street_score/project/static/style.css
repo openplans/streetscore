@@ -150,12 +150,12 @@ img {
   color: white;
 }
 
-a {
-  color: #eeaf20;
+#locate a {
+  color: white;
 }
 
-a:hover {
-  color: #df9926
+#locate a:hover {
+  color: white;
 }
 
 .subnav .navbar-inner {
