@@ -138,3 +138,84 @@ img {
     font-size:18px;
   }
 }
+
+/* Option #1 */
+
+.mainnav .navbar-inner {
+  background-image: url('img/dkblueback.png');
+  background-repeat: repeat;
+}
+
+.mainnav .brand {
+  color: #eeaf20;
+}
+
+.subnav .navbar-inner {
+    background-image: url('img/ltblueback.png');
+  background-repeat: repeat;
+}
+
+.mainnav .navbar-inner .brand {
+  padding: 18px 20px 22px;
+}
+
+.navbar .nav > li > a {
+  padding: 20px 10px 20px;
+}
+
+/* Option #2 */
+
+/*.mainnav .navbar-inner {*/
+/*  background-image: none;*/
+/*  background-color: white;*/
+/*}*/
+
+/*.mainnav .brand {*/
+/*  color: #16488f;*/
+/*}*/
+
+/*.subnav .navbar-inner {*/
+/*  background-image: url('img/ltblueback.png');*/
+/*  background-repeat: repeat;*/
+/*  box-shadow: none;*/
+/*  -mox-box-shaddow: none;*/
+/*  -webkit-box-shadow: none;*/
+/*}*/
+
+/*.mainnav .navbar-inner .brand {*/
+/*  padding: 28px 20px 32px;*/
+/*}*/
+
+/*.navbar .nav > li > a {*/
+/*  color: black;*/
+/*  padding: 30px 10px 30px;*/
+/*  text-shadow: 1px 1px #CCC;*/
+/*}*/
+
+/*.survey-choice .streetview {*/
+/*  border: 1px solid black;*/
+/*  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);*/
+/*  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*body {*/
+/*  background-image: url('img/dkblueback.png');*/
+/*  background-repeat: repeat;*/
+/*}*/
+
+/*h1 {*/
+/*  color: white;*/
+/*  text-shadow: 1px 1px black;*/
+/*}*/
+
+/*a {*/
+/*  color: #fec619;*/
+/*}*/
+
+/*a:hover {*/
+/*  color: #df9926*/
+/*}*/
+
+/*hr {*/
+/*  border-color: #fec619;*/
+/*}*/
