@@ -1,0 +1,15 @@
+import os
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': '<Database Name>',
+        'USER': '<Database User>',
+        'PASSWORD': '<Database Password>',
+        'HOST': '<Database Host>',  # Set to empty string for localhost.
+        'PORT': '<Database Port>',  # Set to empty string for default.
+    },
+}
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'w1-&hl-hx+&+vg4ul0hr=)sjvau^6e#dj-igu@$%e(db=kv9_b'
