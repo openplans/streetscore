@@ -16,11 +16,10 @@ class BulkUploadFormAdminView (views.FormView):
     template_name = "bulkadmin/bulk_add_form.html"
 
     def form_valid(self, form):
-        data = form.cleaned_data['data']
-        Place.objects.bulk_create([Place(**d) for d in data])
+        objects = form.bulk_create(Place)
 
         if self.model_admin:
-            n = len(data)
+            n = len(objects)
             self.model_admin.message_user(
                 self.request,
                 _("Successfully inserted {count:d} {items}.").format(
@@ -28,6 +27,9 @@ class BulkUploadFormAdminView (views.FormView):
             )
 
         return super(BulkUploadFormAdminView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(BulkUploadFormAdminView, self).form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
         context = super(BulkUploadFormAdminView, self).get_context_data(*args, **kwargs)

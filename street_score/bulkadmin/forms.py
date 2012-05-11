@@ -10,6 +10,11 @@ class BulkUploadForm(forms.Form):
            file, click the 'Upload' button below.</p>
         """)
 
+    exclude_duplicates = forms.BooleanField(help_text="""
+        <p>If checked, only values not already in the database will be imported.
+           Note that this may be a slow operation on large data sets.
+        """, initial=False, required=False)
+
     def clean(self):
         cleaned_data = super(BulkUploadForm, self).clean()
 
@@ -30,3 +35,19 @@ class BulkUploadForm(forms.Form):
             i += 1
 
         return data
+
+    def bulk_create(self, ModelClass):
+        data = self.cleaned_data['data']
+        exclude_duplicates = self.cleaned_data['exclude_duplicates']
+
+        if not exclude_duplicates:
+            instances = [ModelClass(**d) for d in data]
+            ModelClass.objects.bulk_create(instances)
+        else:
+            instances = []
+            for d in data:
+                instance, created = ModelClass.objects.get_or_create(**d)
+                if created:
+                    instances.append(instance)
+
+        return instances
