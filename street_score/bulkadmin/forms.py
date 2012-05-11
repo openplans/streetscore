@@ -18,7 +18,9 @@ class BulkUploadForm(forms.Form):
     def clean(self):
         cleaned_data = super(BulkUploadForm, self).clean()
 
-        cleaned_data['data'] = BulkUploadForm.load_csv(cleaned_data['data'])
+        if 'data' in cleaned_data:
+            cleaned_data['data'] = BulkUploadForm.load_csv(cleaned_data['data'])
+
         return cleaned_data
 
     @staticmethod
