@@ -46,8 +46,11 @@ class BulkUploadForm(forms.Form):
         else:
             instances = []
             for d in data:
-                instance, created = ModelClass.objects.get_or_create(**d)
-                if created:
-                    instances.append(instance)
+                try:
+                    instance, created = ModelClass.objects.get_or_create(**d)
+                    if created:
+                        instances.append(instance)
+                except ModelClass.MultipleObjectsReturned:
+                    pass
 
         return instances

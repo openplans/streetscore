@@ -60,7 +60,7 @@ class BulkUploadTest(TestCase):
                 {'data': csvfile},
                 follow=True)
 
-            assert_equal(Place.objects.count(), 25)
+        assert_equal(Place.objects.count(), 25)
 
     @istest
     def test_BulkUploadFormAdminView_excluding_duplicates(self):
@@ -85,4 +85,38 @@ class BulkUploadTest(TestCase):
                  'exclude_duplicates': 'checked'},
                 follow=True)
 
-            assert_equal(Place.objects.count(), 20)
+        assert_equal(Place.objects.count(), 20)
+
+    @istest
+    def test_BulkUploadFormAdminView_excluding_duplicates_with_existing_data(self):
+        username = 'test_admin'
+        email = 'test_admin@openplans.org'
+        password = 'pw'
+        client = Client()
+        csvname = self.get_test_file_name()
+
+        Place.objects.all().delete()
+        User.objects.all().delete()
+
+        User.objects.create_superuser(username, email, password)
+        loggedin = client.login(username=username, password=password)
+        assert (loggedin)
+
+        # First, insert some data, duplicates and all
+        with open(csvname) as csvfile:
+            bulk_add_url = reverse(admin_urlname(Place._meta, 'bulk_add'))
+            res = client.post(
+                bulk_add_url,
+                {'data': csvfile},
+                follow=True)
+
+        # Then, try inserting data, excluding duplicates
+        with open(csvname) as csvfile:
+            bulk_add_url = reverse(admin_urlname(Place._meta, 'bulk_add'))
+            res = client.post(
+                bulk_add_url,
+                {'data': csvfile,
+                 'exclude_duplicates': 'checked'},
+                follow=True)
+
+        assert_equal(Place.objects.count(), 25)
