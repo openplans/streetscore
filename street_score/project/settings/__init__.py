@@ -49,7 +49,7 @@ except IOError:
             'STREETSCORE_DB_PORT': url.port or 5432,
         }
     else:
-        env = {}
+        env = os.environ
 
 def abs_dir(sub_path):
     this_dir = os.path.dirname(__file__)
