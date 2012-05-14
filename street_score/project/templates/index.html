@@ -107,7 +107,11 @@
         </div>
         <div class="modal-body">
           {% if site_config.about_text %}
-            {{ site_config.about_text }}
+            {% if site_config.about_text_is_html %}
+              {{ site_config.about_text|safe }}
+            {% else %}
+              {{ site_config.about_text }}
+            {% endif %}
           {% else %}
             <p>What makes a beautiful street, or a pleasant neighborhood? Maybe that’s hard to define, but can you tell a beautiful place from somewhere that’s not so hot?</p>
             <p><a href="{{ site.domain }}">{{ site.name }}</a> is a project from <a href="http://openplans.org/civicworks">OpenPlans</a>. It’s an experiment: we’re trying out a different way to evaluate places, called pairwise surveys, as popularized by the fantastic <a href="http://allourideas.org">All Our Ideas</a>. We’re also testing out some neat interface ideas, and learning about the use of <a href="http://maps.google.com/intl/en/help/maps/streetview/">Street View</a> in evaluating places for urban planning projects.</p>
