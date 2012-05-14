@@ -115,6 +115,7 @@ class SiteConfiguration (models.Model):
 
     about_title = models.CharField(max_length=256, null=True, blank=True)
     about_text = models.TextField(null=True, blank=True)
+    about_text_is_html = models.BooleanField(blank=True, default=False)
 
     def __unicode__(self):
         return 'Configuration for {0}'.format(self.site.name)
