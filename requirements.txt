@@ -6,7 +6,7 @@ django-bootstrapped
 
 # Backbone front-end application framework
 git+git://github.com/mjumbewu/django-backbonejs.git#egg=django-backbonejs
-djangorestframework==0.4.0
+djangorestframework==3.11.2
 
 # Mustache templates for the front-end
 django-mustachejs
