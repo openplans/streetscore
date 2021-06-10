@@ -1,5 +1,5 @@
 # Django trunk
-Django==1.4
+Django==2.2.24
 
 # Bootstrap theme and such
 django-bootstrapped
